@@ -4,6 +4,10 @@
 
 **Mặc định dùng nguồn mở, không cần API key nhà cung cấp.** Python 3.12, FastMCP Streamable HTTP tại `/mcp`, giao diện di động tiếng Việt tại `/`.
 
+## Trang đồng hành bus/tàu + LLM
+
+Trang `/` nay là giao diện hỏi đáp tiếng Việt, hành trình từng chặng và GPS nhắc gần điểm xuống. Bộ công cụ cũ ở `/tools`. Xem [COMPANION.md](COMPANION.md): GPS dùng được khi cấp quyền; tính tuyến/vẽ tuyến và LLM cần cấu hình khóa Google/OpenAI trên Render, không giả dữ liệu khi chưa có khóa.
+
 ## Nguồn menu và giá
 
 [MENU_SOURCES.md](MENU_SOURCES.md): 5 hồ sơ nguồn thật, 15 mục menu/giá, công cụ get_restaurant_sources và adapter đọc bảng Suwon/website JSON-LD. Giá và policy từ bài cũ vẫn unverified; không tự gán cho quán trùng tên.

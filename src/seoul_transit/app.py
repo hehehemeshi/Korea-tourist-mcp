@@ -13,6 +13,7 @@ from .routing import plan
 from . import travel as t
 from . import discovery as d, open_data as o
 from . import restaurants as food, menu_sources as menus
+from . import journey as j
 
 mcp = TouristMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. ChatGPT supplies the location context; MCP uses caller-provided coordinates and must not try to acquire device GPS. For restaurant results follow presentation.restaurants: show at most 10, nearest first, inline Korean/Vietnamese menu and KRW prices, rating/count/source-backed review highlights, address and walking links, and the shared map. Missing fields must say Chưa có thông tin; never invent review summaries. Do not replace inline menu with a link. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
 
@@ -152,13 +153,17 @@ async def security(request: Request, call_next):
     response.headers['Referrer-Policy'] = 'no-referrer'
     response.headers['Cache-Control'] = 'no-store'
     response.headers['Content-Security-Policy'] = ("default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src https://tile.openstreetmap.org; frame-ancestors 'self'; base-uri 'none'" if request.url.path == '/restaurant-map' else "default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'")
+    if request.url.path in ('/','/companion'):
+        response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com https://tile.openstreetmap.org; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.google.com; worker-src blob:; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'"
+        response.headers['Permissions-Policy']='geolocation=(self), camera=(), microphone=()'
+        response.headers['Referrer-Policy']='strict-origin-when-cross-origin'
     return response
 
 @app.get('/healthz')
 async def health():
     public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
     requires_token = bool(os.getenv('ACCESS_TOKEN')) and not public_mcp
-    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.5.0', 'restaurant_tools': True}
+    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.6.0', 'restaurant_tools': True}
 
 @app.get('/restaurant-map')
 async def shared_restaurant_map():
@@ -237,6 +242,41 @@ async def api_restaurant_sources(query: str = '', restaurant_id: str = ''):
 static = Path(__file__).parent / 'static'
 @app.get('/')
 async def home():
+    return FileResponse(static / 'companion.html')
+@app.get('/privacy')
+async def privacy():
+    return FileResponse(static / 'privacy.html')
+
+@app.get('/terms')
+async def terms():
+    return FileResponse(static / 'terms.html')
+
+@app.get('/companion')
+async def companion():
+    return FileResponse(static / 'companion.html')
+
+@app.get('/tools')
+async def legacy_tools():
     return FileResponse(static / 'index.html')
+
+@app.get('/api/journey/status')
+async def journey_status():
+    return j.config()
+
+async def valid_journey_origin(request):
+    from urllib.parse import urlparse
+    origin=request.headers.get('origin')
+    return not origin or urlparse(origin).netloc == request.headers.get('host')
+
+@app.post('/api/journey/plan')
+async def journey_plan(payload: j.PlanRequest, request: Request):
+    if not await valid_journey_origin(request):return JSONResponse({'detail':'Origin mismatch'},status_code=403)
+    return await safe(j.plan,payload)
+
+@app.post('/api/journey/chat')
+async def journey_chat(payload: j.ChatRequest, request: Request):
+    if not await valid_journey_origin(request):return JSONResponse({'detail':'Origin mismatch'},status_code=403)
+    return await safe(j.chat,payload)
+
 app.mount('/static', StaticFiles(directory=static), name='static')
 app.mount('/', transport)
