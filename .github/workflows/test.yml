@@ -10,4 +10,6 @@ jobs:
           python-version: '3.12'
       - run: pip install '.[test]'
       - run: pytest -q
+      - run: node --check src/seoul_transit/static/bus-map.js
       - run: docker build -t seoul-transit .
+
