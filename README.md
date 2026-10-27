@@ -4,6 +4,10 @@
 
 **Mặc định dùng nguồn mở, không cần API key nhà cung cấp.** Python 3.12, FastMCP Streamable HTTP tại `/mcp`, giao diện di động tiếng Việt tại `/`.
 
+## Nhà hàng v2
+
+Xem [RESTAURANTS.md](RESTAURANTS.md) để dùng `search_nearby_restaurants`, `get_restaurant_menu`, `get_order_policy`, `rank_restaurants`, nhập GPS trên điện thoại và bổ sung bằng chứng menu/giá/quy định. Không cần key để bắt đầu; Kakao ưu tiên nếu đã có key. Menu, chính sách hoặc rating chưa có nguồn sẽ là unknown — không phải dữ liệu đã được tự thu thập.
+
 ## Chức năng hiện tại
 
 | Chức năng | Nguồn mặc định | Giới hạn |
@@ -17,7 +21,7 @@
 | Tuyến và chuyển tuyến trong MCP | NETWORK_FILE đã xác minh, nếu cấu hình | Nếu chưa có đồ thị chỉ trả link Google Maps |
 | Số sân ga | Không có nguồn xác minh | Luôn để null; không suy đoán từ chiều tàu, cửa tàu hay tag cộng đồng |
 
-14 công cụ MCP: `search_stations`, `get_arrivals`, `plan_route`, `search_rail_stations`, `get_rail_schedule`, `search_tourism`, `nearby_tourism`, `tourism_detail`, `search_festivals`, `search_stays`, `search_places`, `geocode_address`, `get_driving_route`, `get_google_maps_links`.
+18 công cụ MCP (thêm bộ nhà hàng v2 bên dưới): `search_stations`, `get_arrivals`, `plan_route`, `search_rail_stations`, `get_rail_schedule`, `search_tourism`, `nearby_tourism`, `tourism_detail`, `search_festivals`, `search_stays`, `search_places`, `geocode_address`, `get_driving_route`, `get_google_maps_links`.
 
 `tourism_detail` và mã ga TAGO vẫn cần khóa của nguồn tương ứng. OSM không cung cấp các mã KTO/TAGO thay thế. Không có công cụ đặt vé, đặt phòng hay gọi taxi.
 
