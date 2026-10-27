@@ -14,17 +14,18 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install playwright httpx
-      - run: playwright install chromium --with-deps
       - name: Read a public test route without credentials
         run: |
           cat > /tmp/check.py <<'PY'
-          import re, json
+          import re, json, shutil
           from urllib.parse import urlparse,urljoin,parse_qs
           import httpx
           from playwright.sync_api import sync_playwright
           base='https://m.gbis.go.kr'
           with sync_playwright() as p:
-              browser=p.chromium.launch(headless=True)
+              chrome=shutil.which('google-chrome') or shutil.which('chromium')
+              assert chrome, 'PREINSTALLED_BROWSER_UNAVAILABLE'
+              browser=p.chromium.launch(executable_path=chrome,headless=True)
               context=browser.new_context(locale='ko-KR')
               page=context.new_page()
               captured={}
@@ -72,8 +73,10 @@ jobs:
                       print('SHAPE_VISIBLE_TEXT',page.locator('body').inner_text()[:700].replace('\\n',' | '))
               else:print('NO_EXACT_TEST_ROUTE_FOUND')
               for path,url in captured.items():
-                  direct=httpx.get(url,timeout=25,follow_redirects=False)
-                  print('ANONYMOUS_DIRECT',path,direct.status_code,direct.headers.get('content-type',''));print('DIRECT_SAMPLE',path,direct.text[:500])
+                  try:
+                      direct=httpx.get(url,timeout=15,follow_redirects=False)
+                      print('ANONYMOUS_DIRECT',path,direct.status_code,direct.headers.get('content-type',''));print('DIRECT_SAMPLE',path,direct.text[:500])
+                  except httpx.HTTPError:print('DIRECT_UNAVAILABLE',path)
 
               browser.close()
           PY
