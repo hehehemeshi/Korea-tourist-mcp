@@ -1,0 +1,69 @@
+name: Verify public Seoul bus source
+on:
+  push:
+    branches: [research/seoul-bus-source]
+permissions:
+  contents: read
+jobs:
+  read-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install httpx playwright
+      - run: |
+          python -u - <<'PY'
+          import json,re,shutil
+          from urllib.parse import urlparse,parse_qs
+          import httpx
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              chrome=shutil.which('google-chrome') or shutil.which('chromium')
+              assert chrome
+              browser=p.chromium.launch(executable_path=chrome,headless=True)
+              context=browser.new_context(locale='ko-KR')
+              page=context.new_page()
+              seen=set()
+              def response(r):
+                  host=urlparse(r.url).hostname or ''
+                  if host!='bus.go.kr' and not host.endswith('.bus.go.kr'):return
+                  kind=r.headers.get('content-type','')
+                  if 'json' not in kind and 'xml' not in kind:return
+                  path=urlparse(r.url).path
+                  if path in seen:return
+                  seen.add(path)
+                  try:
+                      data=r.text()
+                      print('PUBLIC_RESPONSE',r.request.method,r.url.split('?')[0],r.status,kind)
+                      values=parse_qs(urlparse(r.url).query)
+                      if r.request.post_data:
+                          try:values.update(parse_qs(r.request.post_data))
+                          except ValueError:pass
+                      print('PARAM_FIELDS',list(values))
+                      print('PUBLIC_ROUTE_PARAMS',json.dumps({k:v for k,v in values.items() if k.lower() in ('strsrch','routeid','busrouteid','routenm','busroutenm','keyword','searchword','busno')}))
+                      print('PUBLIC_SAMPLE',path,re.sub(r'("(?:apiKey|serviceKey|token)"\\s*:\\s*)"[^\"]*"',r'\\1"<redacted>"',data)[:2000])
+                  except Exception:print('RESPONSE_NOT_READABLE',path)
+              page.on('response',response)
+              for url in ('https://bus.go.kr/','https://m.bus.go.kr/mBus/index.bms'):
+                  try:
+                      page.goto(url,wait_until='domcontentloaded',timeout=35000)
+                      page.wait_for_timeout(4000)
+                      print('PAGE',page.url.split('?')[0],page.title())
+                      print('VISIBLE',page.locator('body').inner_text()[:1400].replace('\\n',' | '))
+                      inputs=page.locator('input:visible').filter(has_not=page.locator('input[type=password]'))
+                      print('INPUTS',page.locator('input:visible').evaluate_all('(els)=>els.map(e=>({id:e.id,name:e.name,placeholder:e.placeholder,type:e.type}))'))
+                      target=page.locator('input[type=text]:visible,input[type=search]:visible').first
+                      if target.count():
+                          target.fill('143')
+                          target.press('Enter')
+                          page.wait_for_timeout(4000)
+                          print('AFTER_SEARCH',page.locator('body').inner_text()[:1800].replace('\\n',' | '))
+                          matches=page.get_by_text('143',exact=True)
+                          if matches.count():
+                              matches.first.click();page.wait_for_timeout(4000)
+                              print('AFTER_ROUTE',page.locator('body').inner_text()[:1300].replace('\\n',' | '))
+                  except Exception as exc:print('PAGE_UNAVAILABLE',url,type(exc).__name__)
+              browser.close()
+          PY
