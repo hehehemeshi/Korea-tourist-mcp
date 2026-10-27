@@ -38,7 +38,7 @@ jobs:
                       fields={name:len(re.findall(re.escape('"'+name+'"'),body)) for name in ('routeId','routeName','stationId','stationName','vehId','plateNo','gpsX','gpsY','x','y','stationSeq')}
                       print('PUBLIC_DATA_RESPONSE',r.request.method,urlparse(r.url).path,r.status,kind,json.dumps({k:v for k,v in fields.items() if v}))
                       path=urlparse(r.url).path
-                      allowed=('/api/routeSearch','/api/routeDetail','/api/routeStations','/api/busLocationsOfRoute','/api/routeLine')
+                      allowed=('/api/routeSearch','/api/routeDetail','/api/routeStations','/api/busLocationsOfRoute','/api/busRouteLine')
                       if path in allowed and path not in captured:
                           captured[path]=r.url
                           print('PUBLIC_QUERY',path,json.dumps({k:v for k,v in parse_qs(urlparse(r.url).query).items() if k in ('keyword','routeId','routeName','busId','q','searchKeyword','searchText')}));print('QUERY_FIELDS',path,list(parse_qs(urlparse(r.url).query)))
