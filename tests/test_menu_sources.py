@@ -128,3 +128,10 @@ class SourceMergeTests(unittest.TestCase):
                 result=await m.details('source:kto-hankookjib','menu')
                 self.assertEqual(result['source']['refresh_status'],'unavailable_snapshot_only')
         asyncio.run(check())
+
+class FixedPriceTests(unittest.TestCase):
+    def test_from_prices_do_not_become_fixed_prices(self):
+        profile=MenuSourceTests().profile('suwon_table')
+        page=m.Page()
+        page.feed('<h1>테스트 식당</h1><table><tr><th>주소</th><td>1 Test Street</td></tr><tr><th>대표메뉴</th><td>칼국수 5,000원부터</td></tr></table>')
+        with self.assertRaises(ValueError):m.suwon_table(profile,page,s.now().isoformat())

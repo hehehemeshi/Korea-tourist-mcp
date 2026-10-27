@@ -187,6 +187,7 @@ def suwon_table(profile,page,checked):
     # Named fixed KRW prices only. No ranges, from-prices, market prices or unit guesses.
     for match in re.finditer(r'([^,;\n]+?)\s+([0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)\s*원',raw):
         name,price=match.group(1).strip(),int(match.group(2).replace(',',''))
+        if re.match(r'\s*(?:부터|이상|~|∼)',raw[match.end():]):continue
         if not name or any(v in name for v in ('~','부터','추가','시가','가격변동','원')):continue
         item={k:e.fact() for k in e.MenuItem.model_fields}
         item['name_ko']=source_fact(name,profile,checked,match.group(0))
