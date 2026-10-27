@@ -1,0 +1,30 @@
+name: Verify Seoul anonymous HTTP schema
+on:
+  push:
+    branches: [research/seoul-bus-source]
+permissions:
+  contents: read
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install httpx
+      - run: |
+          python -u - <<'PY'
+          import json,httpx
+          calls=[('selectVApiTotalstr.do',{'strkey':'143','strdiv':'1','pageIndex':1,'recordCountPerPage':100}),('selectRouteInfo.do',{'rtId':'100100022'}),('selectBusposInfo.do',{'routeId':'100100022','isLowBus':'0'}),('selectBusposByRtid.do',{'routeId':'100100022','isLowBus':'0'})]
+          for path,params in calls:
+              try:
+                  response=httpx.get('https://bus.go.kr/sbus/bus/'+path,params=params,timeout=25,follow_redirects=False)
+                  print('DIRECT_HTTP',path,response.status_code)
+                  data=response.json();root=data.get('ResponseVO',{})
+                  print('RESPONSE_STATUS',path,root.get('code'),root.get('message'))
+                  for key,rows in (root.get('data') or {}).items():
+                      if isinstance(rows,list):print('LIST_SCHEMA',path,key,len(rows),json.dumps(rows[:1],ensure_ascii=False)[:1800])
+                      else:print('FIELD_SCHEMA',path,key,type(rows).__name__)
+              except (httpx.HTTPError,ValueError) as exc:print('DIRECT_UNAVAILABLE',path,type(exc).__name__)
+          PY
