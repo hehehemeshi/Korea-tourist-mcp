@@ -1,0 +1,46 @@
+name: Verify Render bus deployment
+on:
+  push:
+    branches: [ops/check-public-bus-deploy]
+permissions:
+  contents: read
+jobs:
+  read-only-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install httpx
+      - run: |
+          python -u - <<'PY'
+          import time,json,httpx
+          base='https://seoul-transit-mcp.onrender.com'
+          deadline=time.monotonic()+240
+          while time.monotonic()<deadline:
+              try:
+                  response=httpx.get(base+'/healthz',timeout=12)
+                  data=response.json()
+                  print('RENDER_VERSION',data.get('version'),response.status_code,flush=True)
+                  if data.get('version')=='0.5.1':break
+              except (httpx.HTTPError,ValueError):print('RENDER_WAITING',flush=True)
+              time.sleep(15)
+          else:raise RuntimeError('Latest version not yet deployed on Render; no source lookup claimed')
+          response=httpx.get(base+'/api/bus/search',params={'query':'11','region':'Suwon'},timeout=50)
+          print('RENDER_SEARCH_HTTP',response.status_code)
+          response.raise_for_status()
+          routes=response.json()
+          assert routes.get('data') and any(r['route_id']=='200000060' for r in routes['data']), 'Bus source search unavailable'
+          response=httpx.get(base+'/api/bus/route',params={'route_id':'200000060'},timeout=50)
+          response.raise_for_status()
+          snapshot=response.json()
+          print('RENDER_SNAPSHOT',json.dumps({'status':snapshot.get('status'),'stops':len(snapshot.get('stops',[])),'vehicles':len(snapshot.get('vehicles',[])),'shape_points':sum(len(f['geometry']['coordinates']) for f in snapshot.get('map',{}).get('features',[]) if f['geometry']['type']=='LineString'),'parts':{k:v.get('status') for k,v in snapshot.get('parts',{}).items()}},ensure_ascii=False))
+          assert snapshot.get('stops') and any(f['geometry']['type']=='LineString' for f in snapshot.get('map',{}).get('features',[]))
+          headers={'Accept':'application/json, text/event-stream','MCP-Protocol-Version':'2025-03-26'}
+          response=httpx.post(base+'/mcp',headers=headers,json={'jsonrpc':'2.0','id':2,'method':'tools/list','params':{}},timeout=30)
+          print('RENDER_MCP_HTTP',response.status_code)
+          text=response.text
+          assert response.status_code==200 and 'search_bus_routes' in text and 'get_bus_route_map' in text
+          print('RENDER_AUTOMATIC_BUS_VERIFIED')
+          PY
