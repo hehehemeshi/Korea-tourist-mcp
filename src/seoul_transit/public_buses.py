@@ -20,7 +20,7 @@ UI_URI='ui://korea-tourist/bus-map-v1.html'
 SOURCE=BASE+'/search'
 OPS={'search':'routeSearch','detail':'routeDetail','stops':'routeStations','vehicles':'busLocationsOfRoute','shape':'busRouteLine'}
 _cache=OrderedDict()
-_gate=asyncio.Semaphore(3)
+_gate=asyncio.Semaphore(4)
 NOTICE='Xe được nhà cung cấp tham chiếu theo bến/đoạn, không phải tọa độ GPS xe. Thời điểm tải không xác minh thời điểm đo vị trí từng xe. Không nội suy chuyển động.'
 
 
@@ -57,15 +57,27 @@ async def read(kind,params):
     cached=_cache.get(cache_key)
     if cached and clock-cached[0]<ttl:
         result=copy.deepcopy(cached[1]);result['cached']=True;return result
-    try:
-        async with _gate:
-            async with httpx.AsyncClient(timeout=18,follow_redirects=False,headers={'User-Agent':'KoreaTouristMCP/0.5.1 (+https://github.com/hehehemeshi/Korea-tourist-mcp)'}) as client:
-                response=await client.get(BASE+'/api/'+OPS[kind],params=params)
-                response.raise_for_status()
-                if len(response.content)>3_000_000:raise ValueError()
-                payload=response.json()
-        if not isinstance(payload,dict):raise ValueError()
-    except (httpx.HTTPError,ValueError):raise s.Unavailable('Trang dữ liệu công khai GBIS chưa phản hồi hoặc đổi định dạng. Không có dữ liệu thay thế giả.') from None
+    async with _gate:
+        for attempt in range(2):
+            try:
+                async with httpx.AsyncClient(timeout=18,follow_redirects=False,headers={'User-Agent':'KoreaTouristMCP/0.5.1 (+https://github.com/hehehemeshi/Korea-tourist-mcp)'}) as client:
+                    response=await client.get(BASE+'/api/'+OPS[kind],params=params)
+                    response.raise_for_status()
+                    if len(response.content)>3_000_000:raise ValueError()
+                    payload=response.json()
+                if not isinstance(payload,dict):raise ValueError()
+                break
+            except (httpx.TimeoutException,httpx.ConnectError):
+                if attempt==0:
+                    await asyncio.sleep(.4);continue
+                raise s.Unavailable('GBIS tạm mất kết nối hoặc quá thời gian sau 2 lần đọc; không có dữ liệu thay thế giả.') from None
+            except httpx.HTTPStatusError as exc:
+                code=exc.response.status_code
+                if code>=500 and attempt==0:
+                    await asyncio.sleep(.4);continue
+                raise s.Unavailable(f'GBIS trả HTTP {code}; chưa có dữ liệu nguồn hợp lệ.') from None
+            except (httpx.HTTPError,ValueError):
+                raise s.Unavailable('Trang GBIS đổi định dạng hoặc chưa phản hồi hợp lệ; không có dữ liệu thay thế giả.') from None
     result=dict(payload=payload,fetched_at=s.now().isoformat(),source_url=BASE+'/api/'+OPS[kind]+'?'+urlencode(params),cached=False)
     _cache[cache_key]=(time.monotonic(),copy.deepcopy(result));_cache.move_to_end(cache_key)
     while len(_cache)>128:_cache.popitem(last=False)
@@ -125,7 +137,7 @@ def assemble(route_id,parts):
     warnings=[];features=[];stops=[];vehicles=[];metadata={}
     route=dict(route_id=route_id,number=None,region=None,origin=None,destination=None)
     for kind,result in parts.items():
-        if isinstance(result,Exception):metadata[kind]={'status':'unavailable'};warnings.append(f'Nguồn {kind} chưa đọc được.');continue
+        if isinstance(result,Exception):metadata[kind]={'status':'unavailable','message':str(result)};warnings.append(f'Nguồn {kind} chưa đọc được.');continue
         metadata[kind]={key:result[key] for key in ('source_url','fetched_at','cached')}
         try:
             payload=result['payload']

@@ -30,6 +30,13 @@ with sync_playwright() as p:
     assert data,'No automatic server route request'
     snapshot=data[-1]
     print('LIVE_PUBLIC_MAP',json.dumps({'status':snapshot['status'],'route_id':snapshot['route_id'],'stops':len(snapshot['stops']),'vehicles':len(snapshot['vehicles']),'shape_points':sum(len(f['geometry']['coordinates']) for f in snapshot['map']['features'] if f['geometry']['type']=='LineString'),'parts':{k:v['status'] for k,v in snapshot['parts'].items()},'fetched_at':snapshot['fetched_at']},ensure_ascii=False))
+    if snapshot['parts']['vehicles']['status']=='unavailable':
+        with page.expect_response(lambda r:'/api/bus/route?' in r.url,timeout=60000) as refreshed:
+            page.locator('#refresh').click()
+        snapshot=refreshed.value.json()
+        page.wait_for_function("!document.getElementById('refresh').disabled")
+        print('LIVE_REFRESH',json.dumps({'status':snapshot['status'],'stops':len(snapshot['stops']),'vehicles':len(snapshot['vehicles']),'parts':{k:v['status'] for k,v in snapshot['parts'].items()}},ensure_ascii=False))
+    page.screenshot(path='bus-map-desktop.png',full_page=True)
     assert snapshot['route_id']=='200000060','Wrong region or route selection'
     assert snapshot['stops'],'No source stops'
     assert any(f['geometry']['type']=='LineString' for f in snapshot['map']['features']),'No provider shape'
