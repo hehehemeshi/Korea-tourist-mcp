@@ -47,7 +47,9 @@ def test_explicit_transfer_route(tmp_path, monkeypatch):
 
 def test_mcp_and_http():
     from fastapi.testclient import TestClient
-    from seoul_transit.app import app, mcp
+    import importlib
+    module=importlib.reload(importlib.import_module('seoul_transit.app'))
+    app,mcp=module.app,module.mcp
     from fastmcp import Client
     async def check():
         async with Client(mcp) as client:

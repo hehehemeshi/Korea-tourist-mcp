@@ -2,7 +2,7 @@
 from pathlib import Path
 from fastmcp import FastMCP
 from fastmcp.tools.tool import ToolResult
-from mcp.server.lowlevel.helper_types import ReadResourceContents
+from mcp.types import ReadResourceRequest, ReadResourceResult
 from .presentation import UI_URI
 
 UI_META={
@@ -20,12 +20,18 @@ def html():
 
 
 class TouristMCP(FastMCP):
-    async def _read_resource(self,context):
-        contents=await super()._read_resource(context)
-        if str(context.message.uri)==UI_URI:
-            # FastMCP 2.x does not forward resource metadata to resources/read contents.
-            return [ReadResourceContents(content=c.content,mime_type=c.mime_type,meta=UI_META) for c in contents]
-        return contents
+    def _setup_read_resource_handler(self):
+        # FastMCP 2.14 converts resource contents but drops their _meta.
+        # Wrap the SDK boundary after normal resource/middleware validation.
+        super()._setup_read_resource_handler()
+        original=self._mcp_server.request_handlers[ReadResourceRequest]
+        async def handler(request):
+            result=await original(request)
+            if str(request.params.uri)==UI_URI and isinstance(result.root,ReadResourceResult):
+                for content in result.root.contents:
+                    content.meta=UI_META
+            return result
+        self._mcp_server.request_handlers[ReadResourceRequest]=handler
 
 
 def tool_result(data):
