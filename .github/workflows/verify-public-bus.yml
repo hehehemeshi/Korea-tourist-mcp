@@ -1,7 +1,7 @@
 name: Verify automatic public bus map
 on:
   push:
-    branches: [feat/public-bus-map]
+    branches: [feat/region-aware-buses]
   workflow_dispatch:
 permissions:
   contents: read

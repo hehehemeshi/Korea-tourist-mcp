@@ -15,6 +15,7 @@ from urllib.parse import urlencode
 import httpx
 from . import service as s
 
+GG_NAMES=('수원','성남','의정부','안양','부천','광명','평택','동두천','안산','고양','과천','구리','남양주','오산','시흥','군포','의왕','하남','용인','파주','이천','안성','김포','화성','광주','양주','포천','여주','연천','가평','양평')
 BASE='https://m.gbis.go.kr'
 UI_URI='ui://korea-tourist/bus-map-v1.html'
 SOURCE=BASE+'/search'
@@ -93,9 +94,9 @@ def route_card(row):
 async def search(query,region=''):
     if not isinstance(query,str) or not query.strip() or len(query)>30 or re.search(r'[\x00-\x1f/\\?#]',query):raise ValueError('Nhập số/tên tuyến bus (1–30 ký tự).')
     if not isinstance(region,str) or len(region)>40:raise ValueError('Tên khu vực quá dài.')
-    region={'suwon':'수원','seoul':'서울','yongin':'용인','ansan':'안산','seongnam':'성남','incheon':'인천'}.get(region.strip().casefold(),region.strip())
+    region={'gyeonggi':'경기도','gyeonggi-do':'경기도','suwon':'수원','seoul':'서울','yongin':'용인','ansan':'안산','seongnam':'성남','incheon':'인천'}.get(region.strip().casefold(),region.strip())
     result=await read('search',{'keyword':query.strip()})
-    selected=[route_card(row) for row in rows(result['payload']) if row.get('routeId') is not None and (not region or region.casefold() in str(row.get('regionName','')).casefold())]
+    selected=[route_card(row) for row in rows(result['payload']) if row.get('routeId') is not None and (not region or (region=='경기도' and any(city in str(row.get('regionName','')).split(',') for city in GG_NAMES)) or region.casefold() in str(row.get('regionName','')).casefold())]
     exact=[row for row in selected if row['number'].casefold()==query.strip().casefold()]
     if exact:selected=exact
     return dict(status='ok' if selected else 'no_data',data=selected[:20],truncated=len(selected)>20,
@@ -201,4 +202,4 @@ def ui_html():
 def summary(data):
     route=data['route'];base=os.getenv('PUBLIC_BASE_URL','https://seoul-transit-mcp.onrender.com').rstrip('/')
     if not re.fullmatch(r'https://[a-zA-Z0-9.-]+(?::\d+)?',base):base='https://seoul-transit-mcp.onrender.com'
-    return f"Bus {route.get('number') or 'Chưa có thông tin'} · {route.get('region') or 'GBIS'}: {len(data['stops'])} bến, {len(data['vehicles'])} bản ghi xe.\n\n{NOTICE}\n\nTrạng thái từng nguồn: "+', '.join(k+': '+v['status'] for k,v in data['parts'].items())+f"\n\nNguồn: {SOURCE}\nTải lúc: {data['fetched_at']}\n[Bản đồ tuyến]({base}/bus?route_id={data['route_id']})"
+    return f"Bus {route.get('number') or 'Chưa có thông tin'} · {route.get('region') or 'GBIS'}: {len(data['stops'])} bến, {len(data['vehicles'])} bản ghi xe.\n\n{data.get('position_notice',NOTICE)}\n\nTrạng thái từng nguồn: "+', '.join(k+': '+v['status'] for k,v in data['parts'].items())+f"\n\nNguồn: {data.get('source_url',SOURCE)}\nTải lúc: {data['fetched_at']}\n[Bản đồ tuyến]({base}/bus?route_id={data['route_id']})"

@@ -13,9 +13,9 @@ from .routing import plan
 from . import travel as t
 from . import discovery as d, open_data as o
 from . import restaurants as food, menu_sources as menus
-from . import public_buses as buses
+from . import bus_router as buses
 
-mcp = TouristMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. For bus requests use search_bus_routes then get_bus_route_map automatically; do not hand users off to manually search GBIS. GBIS vehicle markers are stop references, not GPS; retain source/partial status. ChatGPT supplies the location context; MCP uses caller-provided coordinates and must not try to acquire device GPS. For restaurant results follow presentation.restaurants: show at most 10, nearest first, inline Korean/Vietnamese menu and KRW prices, rating/count/source-backed review highlights, address and walking links, and the shared map. Missing fields must say Chưa có thông tin; never invent review summaries. Do not replace inline menu with a link. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
+mcp = TouristMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. For bus requests use search_bus_routes then get_bus_route_map automatically. Never default to Suwon, Gyeonggi or any region. Use the explicit requested city/province, otherwise caller-provided coordinates. Missing/ambiguous region requires clarification. Unsupported regions must be reported, never substituted with Seoul/GBIS. Follow source-scoped route IDs; vehicle accuracy and observation time are source-specific. Preserve partial coverage and staleness. ChatGPT supplies the location context; MCP uses caller-provided coordinates and must not try to acquire device GPS. For restaurant results follow presentation.restaurants: show at most 10, nearest first, inline Korean/Vietnamese menu and KRW prices, rating/count/source-backed review highlights, address and walking links, and the shared map. Missing fields must say Chưa có thông tin; never invent review summaries. Do not replace inline menu with a link. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
 
 async def safe(fn, *args):
     try:
@@ -132,13 +132,13 @@ def restaurant_widget():
     return restaurant_html()
 
 @mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True})
-async def search_bus_routes(query: str, region: str = ''):
-    """Automatically read public GBIS route search without a provider API key or account. query is bus number/name; region may be Suwon/수원, Yongin/용인, etc. Prioritize exact bus number within the requested region. Choose by route_id and endpoints; never confuse duplicate numbers across cities. This source covers GBIS/Gyeonggi results, not all Korean transit. Follow with get_bus_route_map; do not tell the user to search GBIS manually."""
-    return await safe(buses.search,query,region)
+async def search_bus_routes(query: str, region: str = '', longitude: float | None = None, latitude: float | None = None):
+    """Select a verified bus source from the requested city/province, or caller-provided WGS84 coordinates. No default region. Without location return needs_region; unsupported areas return unsupported_region without querying another region. Seoul uses its public source, Gyeonggi uses GBIS; cross-region GBIS fallbacks are explicitly limited. Do not acquire device GPS. Use source-scoped route_id from results with get_bus_route_map. Distinguish this route lookup/map from A-to-B multi-leg planning, which is not implemented here."""
+    return await safe(buses.search,query,region,longitude,latitude)
 
 @mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True}, meta={'ui':{'resourceUri':buses.UI_URI},'openai/outputTemplate':buses.UI_URI})
 async def get_bus_route_map(route_id: str):
-    """Automatically retrieve GBIS public route geometry, ordered stops and bus stop-relative positions. Use route_id from search_bus_routes, not a bus number. Returns an interactive common map and structured data without provider keys or manual navigation. Amber vehicle markers anchor to the provider-referenced stop, not exact vehicle GPS. Never infer direction, vehicle observation time or animate movement. Preserve partial-source errors and source timestamps; request time is not GPS measurement time."""
+    """Retrieve the provider in source-scoped route_id from search_bus_routes; never infer provider from bus number. Returns route shape, ordered stops and source-specific vehicle positions. Seoul GPS markers require valid coordinates and a fresh dataTm (120 seconds). GBIS amber markers are stop references, not GPS. Preserve observation/read times, direction evidence, stale/missing data and source errors. Existing numeric saved links retain GBIS compatibility only."""
     data=await safe(buses.snapshot,route_id)
     if 'map' not in data:return data
     from fastmcp.tools.tool import ToolResult
@@ -180,7 +180,7 @@ async def security(request: Request, call_next):
 async def health():
     public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
     requires_token = bool(os.getenv('ACCESS_TOKEN')) and not public_mcp
-    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.5.1', 'restaurant_tools': True}
+    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.5.2', 'restaurant_tools': True}
 
 @app.get('/restaurant-map')
 async def shared_restaurant_map():
@@ -257,8 +257,12 @@ async def api_restaurant_sources(query: str = '', restaurant_id: str = ''):
     return await safe(menus.find, query, restaurant_id)
 
 @app.get('/api/bus/search')
-async def api_bus_search(query: str,region: str=''):
-    return await safe(buses.search,query,region)
+async def api_bus_search(query: str,region: str='',longitude: float | None=None,latitude: float | None=None):
+    return await safe(buses.search,query,region,longitude,latitude)
+
+@app.get('/api/bus/coverage')
+async def api_bus_coverage():
+    return buses.coverage()
 
 @app.get('/api/bus/route')
 async def api_bus_route(route_id: str):

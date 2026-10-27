@@ -1,4 +1,4 @@
-"""Real public source and UI smoke, with no provider credentials or user location."""
+"""Real source and browser checks in two cities; unsupported city must not show an old map."""
 import json
 import shutil
 import time
@@ -16,38 +16,37 @@ with sync_playwright() as p:
     assert chrome,'No preinstalled browser'
     browser=p.chromium.launch(executable_path=chrome,headless=True)
     page=browser.new_page(viewport={'width':1280,'height':1000})
-    data=[];errors=[]
-    page.on('pageerror',lambda error:errors.append(str(error)))
-    def response(r):
-        if '/api/bus/route?' in r.url:
-            try:data.append(r.json())
-            except Exception:pass
-    page.on('response',response)
+    errors=[];page.on('pageerror',lambda error:errors.append(str(error)))
     page.goto(base+'/bus',wait_until='domcontentloaded')
-    page.locator('#query').fill('11')
-    page.locator('#search').click()
-    page.wait_for_selector('#result:not([hidden])',timeout=100000)
-    assert data,'No automatic server route request'
-    snapshot=data[-1]
-    print('LIVE_PUBLIC_MAP',json.dumps({'status':snapshot['status'],'route_id':snapshot['route_id'],'stops':len(snapshot['stops']),'vehicles':len(snapshot['vehicles']),'shape_points':sum(len(f['geometry']['coordinates']) for f in snapshot['map']['features'] if f['geometry']['type']=='LineString'),'parts':{k:v['status'] for k,v in snapshot['parts'].items()},'fetched_at':snapshot['fetched_at']},ensure_ascii=False))
-    if snapshot['parts']['vehicles']['status']=='unavailable':
-        with page.expect_response(lambda r:'/api/bus/route?' in r.url,timeout=60000) as refreshed:
-            page.locator('#refresh').click()
-        snapshot=refreshed.value.json()
-        page.wait_for_function("!document.getElementById('refresh').disabled")
-        print('LIVE_REFRESH',json.dumps({'status':snapshot['status'],'stops':len(snapshot['stops']),'vehicles':len(snapshot['vehicles']),'parts':{k:v['status'] for k,v in snapshot['parts'].items()}},ensure_ascii=False))
-    page.screenshot(path='bus-map-desktop.png',full_page=True)
-    assert snapshot['route_id']=='200000060','Wrong region or route selection'
-    assert snapshot['stops'],'No source stops'
-    assert any(f['geometry']['type']=='LineString' for f in snapshot['map']['features']),'No provider shape'
-    assert snapshot['parts']['vehicles']['status'] in ('ok','no_data'),'Vehicle source unavailable'
-    assert all(v['gps_coordinates'] is None for v in snapshot['vehicles'])
-    assert page.locator('#shape polyline').count()>0,'Route was not drawn'
-    assert not errors,errors
-    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
-    page.screenshot(path='bus-map-desktop.png',full_page=True)
-    page.set_viewport_size({'width':390,'height':844})
-    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),'Mobile overflow'
-    page.screenshot(path='bus-map-mobile.png',full_page=True)
-    print('UI_VERIFIED_DESKTOP_MOBILE',len(snapshot['stops']),len(snapshot['vehicles']))
+    assert page.locator('#region').input_value()=='','A region was silently preselected'
+    for region,number,expected in [('Seoul','143','seoul:100100022'),('Suwon','11','gbis:200000060')]:
+        page.locator('#region').fill(region);page.locator('#query').fill(number)
+        with page.expect_response(lambda r:'/api/bus/route?' in r.url,timeout=100000) as loaded:
+            page.locator('#search').click()
+        snapshot=loaded.value.json()
+        page.wait_for_function("!document.getElementById('search').disabled")
+        if snapshot['parts']['vehicles']['status']=='unavailable':
+            with page.expect_response(lambda r:'/api/bus/route?' in r.url,timeout=60000) as refreshed:page.locator('#refresh').click()
+            snapshot=refreshed.value.json()
+            page.wait_for_function("!document.getElementById('refresh').disabled")
+        print('LIVE_REGION_MAP',json.dumps({'region':region,'status':snapshot['status'],'route_id':snapshot['route_id'],'stops':len(snapshot['stops']),'vehicles':len(snapshot['vehicles']),'shape_points':sum(len(f['geometry']['coordinates']) for f in snapshot['map']['features'] if f['geometry']['type']=='LineString'),'parts':{k:v['status'] for k,v in snapshot['parts'].items()},'fetched_at':snapshot['fetched_at']},ensure_ascii=False))
+        assert snapshot['route_id']==expected,'Wrong source, region or route'
+        assert snapshot['stops'] and any(f['geometry']['type']=='LineString' for f in snapshot['map']['features'])
+        assert snapshot['parts']['vehicles']['status'] in ('ok','no_data')
+        assert page.locator('#shape polyline').count()>0
+        assert not errors,errors
+        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+        page.screenshot(path='bus-map-'+region.lower()+'-desktop.png',full_page=True)
+        page.set_viewport_size({'width':390,'height':844})
+        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),'Mobile overflow'
+        page.screenshot(path='bus-map-'+region.lower()+'-mobile.png',full_page=True)
+        page.set_viewport_size({'width':1280,'height':1000})
+        # An unsupported city must clear the last successful city's map.
+        page.locator('#region').fill('Busan');page.locator('#query').fill(number)
+        with page.expect_response(lambda r:'/api/bus/search?' in r.url,timeout=15000) as unsupported:page.locator('#search').click()
+        assert unsupported.value.json()['status']=='unsupported_region'
+        page.wait_for_function("!document.getElementById('search').disabled")
+        assert page.locator('#result').is_hidden(),'Previous-region map remained visible'
+        print('UNSUPPORTED_REGION_NO_SUBSTITUTION',region,'to Busan')
+    print('UI_VERIFIED_TWO_REGIONS_DESKTOP_MOBILE')
     browser.close()

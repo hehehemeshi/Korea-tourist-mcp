@@ -6,7 +6,7 @@
 
 ## Bản đồ bus tự động, không cần đăng ký API key
 
-[PUBLIC_BUS.md](PUBLIC_BUS.md): 2 công cụ `search_bus_routes`, `get_bus_route_map` tự đọc dữ liệu GBIS công khai và trả bản đồ tuyến/bến/xe theo bến. Trang `/bus` tự lấy dữ liệu trong server này; không bắt người dùng sang GBIS tìm thủ công. Xe được gắn theo bến tham chiếu, chưa có GPS chính xác.
+[PUBLIC_BUS.md](PUBLIC_BUS.md): Hai công cụ chọn nguồn theo vùng được hỏi hoặc tọa độ ChatGPT cung cấp; không mặc định Suwon. Seoul và GBIS đã có nguồn public-web kiểm chứng, vùng khác báo chưa tích hợp. Trang `/bus` không chọn sẵn vùng và không giữ bản đồ vùng trước làm kết quả mới. GPS Seoul có giờ đo/kiểm tra độ mới; GBIS là vị trí theo bến. Chưa phủ toàn Hàn Quốc.
 
 ## Nguồn menu và giá
 
@@ -29,7 +29,7 @@ Xem [RESTAURANTS.md](RESTAURANTS.md) để dùng `search_nearby_restaurants`, `g
 | Tuyến và chuyển tuyến trong MCP | NETWORK_FILE đã xác minh, nếu cấu hình | Nếu chưa có đồ thị chỉ trả link Google Maps |
 | Số sân ga | Không có nguồn xác minh | Luôn để null; không suy đoán từ chiều tàu, cửa tàu hay tag cộng đồng |
 
-19 công cụ MCP (bộ nhà hàng v2 và nguồn menu): `search_stations`, `get_arrivals`, `plan_route`, `search_rail_stations`, `get_rail_schedule`, `search_tourism`, `nearby_tourism`, `tourism_detail`, `search_festivals`, `search_stays`, `search_places`, `geocode_address`, `get_driving_route`, `get_google_maps_links`.
+21 công cụ MCP (gồm hai công cụ bản đồ bus theo vùng): `search_stations`, `get_arrivals`, `plan_route`, `search_rail_stations`, `get_rail_schedule`, `search_tourism`, `nearby_tourism`, `tourism_detail`, `search_festivals`, `search_stays`, `search_places`, `geocode_address`, `get_driving_route`, `get_google_maps_links`.
 
 `tourism_detail` và mã ga TAGO vẫn cần khóa của nguồn tương ứng. OSM không cung cấp các mã KTO/TAGO thay thế. Không có công cụ đặt vé, đặt phòng hay gọi taxi.
 
