@@ -25,7 +25,7 @@
 
 1. Mã đã có trong repository này. Bấm **Deploy to Render** và đăng nhập Render qua GitHub.
 2. Blueprint dùng gói **Free** nếu tài khoản/khu vực hỗ trợ. Máy chủ có thể ngủ, gây khởi động chậm. Chỉ chọn gói trả phí nếu bạn chấp nhận giá hiện hành.
-3. Bấm **Deploy Blueprint**; không cần nhập các khóa Seoul/KTO/Kakao/Naver. ACCESS_TOKEN được Render tự tạo.
+3. Bấm **Deploy Blueprint**; không cần nhập các khóa Seoul/KTO/Kakao/Naver. ACCESS_TOKEN được Render tự tạo cho REST API; Blueprint mới đặt MCP_PUBLIC=true cho MCP chỉ đọc công khai để thêm vào ChatGPT bằng No authentication. Dịch vụ cũ cần cập nhật biến này trên Render.
 4. Kiểm tra `https://TEN.onrender.com/healthz` trả `ok`. Đây chỉ là sức khỏe máy chủ, không đảm bảo nguồn công cộng đang hoạt động.
 5. Xem [CHATGPT.md](CHATGPT.md) để chọn cách xác thực rồi thêm URL `/mcp` vào ChatGPT.
 6. Trong giao diện web `/`, nhập ACCESS_TOKEN từ Render để tìm địa điểm hoặc ga. Không gửi token qua lời nhắn ChatGPT, commit hoặc query URL.

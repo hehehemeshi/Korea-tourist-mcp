@@ -63,3 +63,28 @@ def test_mcp_and_http():
                 response = client.get('/api/arrivals?station=강남', headers={'Authorization': 'Bearer test-token'})
                 assert response.status_code == 200
                 assert response.json()['status'] == 'unavailable'
+
+@pytest.mark.parametrize('public', ['true', ' TRUE ', '1', 'yes'])
+def test_public_mcp_initializes_without_bearer(monkeypatch, public):
+    from fastapi.testclient import TestClient
+    from seoul_transit.app import app
+    monkeypatch.setenv('ACCESS_TOKEN', 'test-secret')
+    monkeypatch.setenv('MCP_PUBLIC', public)
+    with TestClient(app) as client:
+        assert client.get('/healthz').json()['mcp_auth'] == 'none'
+        response = client.post('/mcp', headers={'Accept':'application/json, text/event-stream'},
+            json={'jsonrpc':'2.0','id':1,'method':'initialize','params':{
+                'protocolVersion':'2025-03-26','capabilities':{},
+                'clientInfo':{'name':'auth-test','version':'1.0'}}})
+        assert response.status_code == 200
+        assert 'test-secret' not in response.text
+        assert client.get('/api/google?query=Seoul').status_code == 401
+
+def test_private_mcp_requires_token(monkeypatch):
+    from fastapi.testclient import TestClient
+    from seoul_transit.app import app
+    monkeypatch.setenv('ACCESS_TOKEN', 'test-secret')
+    monkeypatch.setenv('MCP_PUBLIC', 'false')
+    with TestClient(app) as client:
+        assert client.get('/healthz').json()['mcp_auth'] == 'bearer'
+        assert client.post('/mcp', json={}).status_code == 401

@@ -105,7 +105,7 @@ app = FastAPI(lifespan=lifespan)
 async def security(request: Request, call_next):
     token = os.getenv('ACCESS_TOKEN')
     is_mcp = request.url.path == '/mcp' or request.url.path.startswith('/mcp/')
-    public_mcp = os.getenv('MCP_PUBLIC', 'false').lower() == 'true'
+    public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
     protected = request.url.path.startswith('/api/') or (is_mcp and not public_mcp)
     if protected and token:
         provided = request.headers.get('authorization', '')
@@ -120,7 +120,9 @@ async def security(request: Request, call_next):
 
 @app.get('/healthz')
 async def health():
-    return {'status': 'ok'}
+    public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
+    requires_token = bool(os.getenv('ACCESS_TOKEN')) and not public_mcp
+    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none'}
 
 @app.get('/api/stations')
 async def api_stations(query: str):

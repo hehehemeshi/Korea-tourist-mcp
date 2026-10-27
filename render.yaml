@@ -1,5 +1,6 @@
 # Open-data discovery + Google Maps links work without provider API keys.
 # Optional official provider keys can be added later in Render Environment.
+# Public read-only MCP for ChatGPT No authentication; REST API stays token-protected.
 services:
   - type: web
     name: seoul-transit-mcp
@@ -10,6 +11,6 @@ services:
       - key: ACCESS_TOKEN
         generateValue: true
       - key: MCP_PUBLIC
-        value: "false"
+        value: "true"
       - key: OPEN_DATA_FIRST
         value: "true"
