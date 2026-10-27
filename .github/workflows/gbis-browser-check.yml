@@ -19,7 +19,7 @@ jobs:
         run: |
           cat > /tmp/check.py <<'PY'
           import re, json
-          from urllib.parse import urlparse,urljoin
+          from urllib.parse import urlparse,urljoin,parse_qs
           import httpx
           from playwright.sync_api import sync_playwright
           base='https://m.gbis.go.kr'
@@ -39,6 +39,7 @@ jobs:
               browser=p.chromium.launch(headless=True)
               context=browser.new_context(locale='ko-KR')
               page=context.new_page()
+              captured={}
               def response(r):
                   if urlparse(r.url).hostname!='m.gbis.go.kr':return
                   kind=r.headers.get('content-type','')
@@ -47,6 +48,14 @@ jobs:
                       body=r.text()
                       fields={name:len(re.findall(re.escape('"'+name+'"'),body)) for name in ('routeId','routeName','stationId','stationName','vehId','plateNo','gpsX','gpsY','x','y','stationSeq')}
                       print('PUBLIC_DATA_RESPONSE',r.request.method,urlparse(r.url).path,r.status,kind,json.dumps({k:v for k,v in fields.items() if v}))
+                      path=urlparse(r.url).path
+                      allowed=('/api/routeSearch','/api/routeDetail','/api/routeStations','/api/busLocationsOfRoute','/api/routeLine')
+                      if path in allowed and path not in captured:
+                          captured[path]=r.url
+                          print('PUBLIC_QUERY',path,json.dumps({k:v for k,v in parse_qs(urlparse(r.url).query).items() if k in ('keyword','routeId','routeName','busId','q','searchKeyword','searchText')}))
+                          if 'json' in kind:
+                              sample=re.sub(r'("(?:plateNo|vehId|serviceKey|apiKey|token)"\\s*:\\s*)"[^"]*"',r'\\1"<redacted>"',body)
+                              print('PUBLIC_JSON_SAMPLE',path,sample[:2400])
                   except Exception:print('BODY_UNAVAILABLE',urlparse(r.url).path)
               page.on('response',response)
               page.goto(base+'/search',wait_until='domcontentloaded',timeout=45000)
@@ -67,7 +76,17 @@ jobs:
                       buttons.first.click();page.wait_for_timeout(5000)
                       print('LIVE_PAGE',urlparse(page.url).path)
                       print('LIVE_VISIBLE_TEXT',page.locator('body').inner_text()[:1800].replace('\n',' | '))
+                  route_path=urlparse(page.url).path
+                  if route_path.startswith('/routeBusLocation/'):
+                      page.goto(base+route_path.replace('/routeBusLocation/','/busRouteLine/'),wait_until='domcontentloaded',timeout=45000)
+                      page.wait_for_timeout(6000)
+                      print('SHAPE_PAGE',urlparse(page.url).path)
+                      print('SHAPE_VISIBLE_TEXT',page.locator('body').inner_text()[:700].replace('\\n',' | '))
               else:print('NO_EXACT_TEST_ROUTE_FOUND')
+              for path,url in captured.items():
+                  direct=httpx.get(url,timeout=25,follow_redirects=False)
+                  print('ANONYMOUS_DIRECT',path,direct.status_code,direct.headers.get('content-type',''))
+
               browser.close()
           PY
           python /tmp/check.py
