@@ -7,14 +7,15 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastmcp import FastMCP
 from . import presentation as view
-from .widget import TouristMCP, TOOL_META, UI_META, html as restaurant_html, tool_result
+from .widget import TouristMCP, TOOL_META, UI_META, BUS_UI_META, html as restaurant_html, tool_result
 from . import service as s
 from .routing import plan
 from . import travel as t
 from . import discovery as d, open_data as o
 from . import restaurants as food, menu_sources as menus
+from . import public_buses as buses
 
-mcp = TouristMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. ChatGPT supplies the location context; MCP uses caller-provided coordinates and must not try to acquire device GPS. For restaurant results follow presentation.restaurants: show at most 10, nearest first, inline Korean/Vietnamese menu and KRW prices, rating/count/source-backed review highlights, address and walking links, and the shared map. Missing fields must say Chưa có thông tin; never invent review summaries. Do not replace inline menu with a link. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
+mcp = TouristMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. For bus requests use search_bus_routes then get_bus_route_map automatically; do not hand users off to manually search GBIS. GBIS vehicle markers are stop references, not GPS; retain source/partial status. ChatGPT supplies the location context; MCP uses caller-provided coordinates and must not try to acquire device GPS. For restaurant results follow presentation.restaurants: show at most 10, nearest first, inline Korean/Vietnamese menu and KRW prices, rating/count/source-backed review highlights, address and walking links, and the shared map. Missing fields must say Chưa có thông tin; never invent review summaries. Do not replace inline menu with a link. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
 
 async def safe(fn, *args):
     try:
@@ -130,6 +131,23 @@ async def get_restaurant_sources(query: str = '', restaurant_id: str = ''):
 def restaurant_widget():
     return restaurant_html()
 
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True})
+async def search_bus_routes(query: str, region: str = ''):
+    """Automatically read public GBIS route search without a provider API key or account. query is bus number/name; region may be Suwon/수원, Yongin/용인, etc. Prioritize exact bus number within the requested region. Choose by route_id and endpoints; never confuse duplicate numbers across cities. This source covers GBIS/Gyeonggi results, not all Korean transit. Follow with get_bus_route_map; do not tell the user to search GBIS manually."""
+    return await safe(buses.search,query,region)
+
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True}, meta={'ui':{'resourceUri':buses.UI_URI},'openai/outputTemplate':buses.UI_URI})
+async def get_bus_route_map(route_id: str):
+    """Automatically retrieve GBIS public route geometry, ordered stops and bus stop-relative positions. Use route_id from search_bus_routes, not a bus number. Returns an interactive common map and structured data without provider keys or manual navigation. Amber vehicle markers anchor to the provider-referenced stop, not exact vehicle GPS. Never infer direction, vehicle observation time or animate movement. Preserve partial-source errors and source timestamps; request time is not GPS measurement time."""
+    data=await safe(buses.snapshot,route_id)
+    if 'map' not in data:return data
+    from fastmcp.tools.tool import ToolResult
+    return ToolResult(content=buses.summary(data),structured_content={k:v for k,v in data.items() if k!='map'},meta={'busSnapshot':data})
+
+@mcp.resource(buses.UI_URI,name='bus_route_map',mime_type='text/html;profile=mcp-app',meta=BUS_UI_META)
+def bus_map_widget():
+    return buses.ui_html()
+
 transport = mcp.http_app(path='/mcp', stateless_http=True)
 @asynccontextmanager
 async def lifespan(app):
@@ -142,7 +160,8 @@ async def security(request: Request, call_next):
     token = os.getenv('ACCESS_TOKEN')
     is_mcp = request.url.path == '/mcp' or request.url.path.startswith('/mcp/')
     public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
-    protected = request.url.path.startswith('/api/') or (is_mcp and not public_mcp)
+    public_bus = request.url.path.startswith('/api/bus/') and public_mcp
+    protected = (request.url.path.startswith('/api/') and not public_bus) or (is_mcp and not public_mcp)
     if protected and token:
         provided = request.headers.get('authorization', '')
         if not secrets.compare_digest(provided, 'Bearer '+token):
@@ -152,13 +171,16 @@ async def security(request: Request, call_next):
     response.headers['Referrer-Policy'] = 'no-referrer'
     response.headers['Cache-Control'] = 'no-store'
     response.headers['Content-Security-Policy'] = ("default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src https://tile.openstreetmap.org; frame-ancestors 'self'; base-uri 'none'" if request.url.path == '/restaurant-map' else "default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'")
+    if request.url.path == '/bus':
+        response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://tile.openstreetmap.org; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+        response.headers['Referrer-Policy']='strict-origin-when-cross-origin'
     return response
 
 @app.get('/healthz')
 async def health():
     public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
     requires_token = bool(os.getenv('ACCESS_TOKEN')) and not public_mcp
-    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.5.0', 'restaurant_tools': True}
+    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.5.1', 'restaurant_tools': True}
 
 @app.get('/restaurant-map')
 async def shared_restaurant_map():
@@ -234,9 +256,22 @@ async def api_restaurant_policy(restaurant_id: str):
 async def api_restaurant_sources(query: str = '', restaurant_id: str = ''):
     return await safe(menus.find, query, restaurant_id)
 
+@app.get('/api/bus/search')
+async def api_bus_search(query: str,region: str=''):
+    return await safe(buses.search,query,region)
+
+@app.get('/api/bus/route')
+async def api_bus_route(route_id: str):
+    return await safe(buses.snapshot,route_id)
+
 static = Path(__file__).parent / 'static'
+@app.get('/bus')
+async def bus_page():
+    return FileResponse(static / 'bus-map.html')
+
 @app.get('/')
 async def home():
     return FileResponse(static / 'index.html')
 app.mount('/static', StaticFiles(directory=static), name='static')
 app.mount('/', transport)
+

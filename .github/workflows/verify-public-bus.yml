@@ -1,0 +1,32 @@
+name: Verify automatic public bus map
+on:
+  push:
+    branches: [feat/public-bus-map]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-public-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install . playwright
+      - name: Test automatic route search and rendering
+        env:
+          MCP_PUBLIC: 'true'
+          ACCESS_TOKEN: test-verification-owner
+        run: |
+          uvicorn seoul_transit.app:app --host 127.0.0.1 --port 8765 --no-access-log >/tmp/bus-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          python scripts/verify_public_bus.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bus-map-verification
+          path: bus-map-*.png
+          if-no-files-found: ignore

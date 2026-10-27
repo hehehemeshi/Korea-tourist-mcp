@@ -12,6 +12,7 @@ UI_META={
     'openai/widgetCSP':{'connect_domains':[],'resource_domains':['https://tile.openstreetmap.org']},
 }
 TOOL_META={'ui':{'resourceUri':UI_URI},'openai/outputTemplate':UI_URI}
+BUS_UI_META={**UI_META,'openai/widgetDescription':'Đường tuyến GBIS, các bến và xe theo bến; dữ liệu đọc tự động, vị trí xe không phải GPS.'}
 
 
 def html():
@@ -27,12 +28,13 @@ class TouristMCP(FastMCP):
         original=self._mcp_server.request_handlers[ReadResourceRequest]
         async def handler(request):
             result=await original(request)
-            if str(request.params.uri)==UI_URI and isinstance(result.root,ReadResourceResult):
+            if str(request.params.uri) in (UI_URI,'ui://korea-tourist/bus-map-v1.html') and isinstance(result.root,ReadResourceResult):
                 for content in result.root.contents:
-                    content.meta=UI_META
+                    content.meta=BUS_UI_META if str(request.params.uri)=='ui://korea-tourist/bus-map-v1.html' else UI_META
             return result
         self._mcp_server.request_handlers[ReadResourceRequest]=handler
 
 
 def tool_result(data):
     return ToolResult(content=data['markdown'],structured_content=data)
+
