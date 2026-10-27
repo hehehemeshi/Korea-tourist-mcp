@@ -10,4 +10,9 @@ jobs:
           python-version: '3.12'
       - run: pip install '.[test]'
       - run: pytest -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/navigation.test.mjs
+      - run: node --check src/seoul_transit/static/companion.js
       - run: docker build -t seoul-transit .

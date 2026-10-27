@@ -1,0 +1,10 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {decodePolyline,evaluatePosition,newNavigationState,lineDistance} from '../src/seoul_transit/static/navigation.mjs';
+const end={latitude:37.267,longitude:127.001};const step={mode:'TRANSIT',end,arrival_stop:{name:'Test stop'}};
+const fix=(time,accuracy=10,latitude=37.267)=>({timestamp:time,coords:{latitude,longitude:127.001,accuracy}});
+test('near-stop requires fresh precise distinct fixes over time, once per stage',()=>{const state=newNavigationState();assert.equal(evaluatePosition(fix(1000000),step,state,1000000).status,'tracking');assert.equal(evaluatePosition(fix(1000000),step,state,1003000).status,'duplicate');assert.equal(evaluatePosition(fix(1003000),step,state,1003000).status,'near_stop');assert.equal(evaluatePosition(fix(1006000),step,state,1006000).status,'tracking');});
+test('tunnel, weak accuracy and stale fixes never trigger near-stop',()=>{for(const value of [null,fix(1000000,300),fix(900000)]){assert.equal(evaluatePosition(value,step,newNavigationState(),1000000).status,'unreliable');}});
+test('no step selected does not infer boarding',()=>assert.equal(evaluatePosition(fix(1000000),null,newNavigationState(),1000000).status,'ready'));
+test('invalid polylines do not become false paths',()=>{assert.deepEqual(decodePolyline('?'),[]);assert.deepEqual(decodePolyline(null),[]);assert.equal(lineDistance(end,[]),null);});
+test('decode known Google example',()=>{const pts=decodePolyline('_p~iF~ps|U_ulLnnqC_mqNvxq`@');assert.equal(pts.length,3);assert.deepEqual(pts[0],{latitude:38.5,longitude:-120.2});});
+test('off-route requires sustained evidence and reports uncertainty',()=>{const state=newNavigationState(),s={mode:'TRANSIT',end:{latitude:38,longitude:127},encoded_polyline:'_p~iF~ps|U_ulLnnqC_mqNvxq`@'};assert.equal(evaluatePosition(fix(1000000),s,state,1000000).status,'tracking');assert.equal(evaluatePosition(fix(1005000),s,state,1005000).status,'tracking');const value=evaluatePosition(fix(1011000),s,state,1011000);assert.equal(value.status,'possible_deviation');assert.match(value.message,/có thể/);});
