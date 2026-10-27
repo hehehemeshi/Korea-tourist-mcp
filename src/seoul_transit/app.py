@@ -10,8 +10,9 @@ from . import service as s
 from .routing import plan
 from . import travel as t
 from . import discovery as d, open_data as o
+from . import restaurants as food
 
-mcp = FastMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers or platforms. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
+mcp = FastMCP('Du lịch Hàn Quốc — Tiếng Việt', instructions='Explain in Vietnamese. Prefer open data and Google Maps hand-off links. Links are not retrieved search results or verified routes. Never invent arrivals, transfers, platforms, menu prices or restaurant ordering policies. Distinguish unknown restaurant evidence from verified budget compatibility. Never infer minimum servings from a dish name. Geodesic distance is not walking distance. Timetables and community map data are not live. Preserve sources, timestamps, cached state and limitations.')
 
 async def safe(fn, *args):
     try:
@@ -94,6 +95,28 @@ async def get_google_maps_links(query: str = '', origin: str = '', destination: 
     """Build keyless Google Maps/search URLs. No API request, result scraping, live arrival or platform claims."""
     return await safe(o.google_links, query, origin, destination, mode)
 
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True})
+async def search_nearby_restaurants(longitude: float, latitude: float, radius: int = 500,
+    budget_krw_per_person: int = 10000, party_size: int = 1, query: str = '', limit: int = 15, include_walking: bool = False):
+    """Find restaurants by explicit WGS84 GPS (longitude,latitude), radius metres, budget KRW/person and party size. Kakao FD6 if keyed, then Overpass, then Photon. Radius is geodesic, not walking. Never infer menu prices, solo rules, live opening or minimum portions. Each fact has source/time/verification. include_walking uses optional ORS for at most 5 places. Does not access phone GPS."""
+    return await safe(food.search_nearby, longitude, latitude, radius, budget_krw_per_person, party_size, query, limit, include_walking)
+
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': False})
+async def get_restaurant_menu(restaurant_id: str):
+    """Read source-backed Korean/Vietnamese menu, KRW prices and original image URLs from reviewed registry. ID from restaurant search. Empty/unknown if no evidence; never scrape or invent translation, prices or photos."""
+    return await safe(food.details, restaurant_id, 'menu')
+
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': False})
+async def get_order_policy(restaurant_id: str):
+    """Read explicit evidence for minimum servings, one item/person, solo allowance and minimum bill. Minimum servings is not minimum diners. Unknown if not separately verified; never infer from menu or cuisine."""
+    return await safe(food.details, restaurant_id, 'policy')
+
+@mcp.tool(annotations={'readOnlyHint': True, 'destructiveHint': False, 'openWorldHint': True})
+async def rank_restaurants(longitude: float, latitude: float, radius: int = 500,
+    budget_krw_per_person: int = 10000, party_size: int = 1, query: str = '', limit: int = 15, include_walking: bool = False):
+    """Find and rank restaurants conservatively: reviewed budget/order compatibility first, then comparable distance, verified ratings as tiebreak. Unknown evidence is not an affordable/solo-friendly recommendation. No invented quality score. Public provider coverage is incomplete."""
+    return await safe(food.rank, longitude, latitude, radius, budget_krw_per_person, party_size, query, limit, include_walking)
+
 transport = mcp.http_app(path='/mcp', stateless_http=True)
 @asynccontextmanager
 async def lifespan(app):
@@ -122,7 +145,7 @@ async def security(request: Request, call_next):
 async def health():
     public_mcp = os.getenv('MCP_PUBLIC', 'false').strip().lower() in ('true', '1', 'yes', 'on')
     requires_token = bool(os.getenv('ACCESS_TOKEN')) and not public_mcp
-    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none'}
+    return {'status': 'ok', 'mcp_auth': 'bearer' if requires_token else 'none', 'version': '0.3.0', 'restaurant_tools': True}
 
 @app.get('/api/stations')
 async def api_stations(query: str):
@@ -168,6 +191,24 @@ async def api_driving(origin: str, destination: str):
 @app.get('/api/google')
 async def api_google(query: str = '', origin: str = '', destination: str = '', mode: str = 'transit'):
     return await safe(o.google_links, query, origin, destination, mode)
+
+@app.get('/api/restaurants')
+async def api_restaurants(longitude: float, latitude: float, radius: int = 500,
+    budget_krw_per_person: int = 10000, party_size: int = 1, query: str = '', limit: int = 15, include_walking: bool = False):
+    return await safe(food.search_nearby, longitude, latitude, radius, budget_krw_per_person, party_size, query, limit, include_walking)
+
+@app.get('/api/restaurants/rank')
+async def api_restaurant_rank(longitude: float, latitude: float, radius: int = 500,
+    budget_krw_per_person: int = 10000, party_size: int = 1, query: str = '', limit: int = 15, include_walking: bool = False):
+    return await safe(food.rank, longitude, latitude, radius, budget_krw_per_person, party_size, query, limit, include_walking)
+
+@app.get('/api/restaurants/menu')
+async def api_restaurant_menu(restaurant_id: str):
+    return await safe(food.details, restaurant_id, 'menu')
+
+@app.get('/api/restaurants/policy')
+async def api_restaurant_policy(restaurant_id: str):
+    return await safe(food.details, restaurant_id, 'policy')
 
 static = Path(__file__).parent / 'static'
 @app.get('/')

@@ -1,0 +1,749 @@
+{
+  "$defs": {
+    "Fact_Annotated_float__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0___Le_le_5_____": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[Annotated[float, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=0), Le(le=5)])]]",
+      "type": "object"
+    },
+    "Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=0)])]]",
+      "type": "object"
+    },
+    "Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])]]",
+      "type": "object"
+    },
+    "Fact_Literal__per_serving____per_person____per_set___": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "per_serving",
+                "per_person",
+                "per_set"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[Literal['per_serving', 'per_person', 'per_set']]",
+      "type": "object"
+    },
+    "Fact_bool_": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[bool]",
+      "type": "object"
+    },
+    "Fact_str_": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "verified",
+            "unverified",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "checked_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checked At"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "method": {
+          "default": "unknown",
+          "enum": [
+            "restaurant_official",
+            "direct_observation",
+            "provider_response",
+            "community",
+            "translation",
+            "unknown"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_excerpt": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Excerpt"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attribution"
+        }
+      },
+      "title": "Fact[str]",
+      "type": "object"
+    },
+    "MenuItem": {
+      "additionalProperties": false,
+      "properties": {
+        "name_ko": {
+          "$ref": "#/$defs/Fact_str_"
+        },
+        "name_vi": {
+          "$ref": "#/$defs/Fact_str_"
+        },
+        "price_krw": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____"
+        },
+        "price_basis": {
+          "$ref": "#/$defs/Fact_Literal__per_serving____per_person____per_set___"
+        },
+        "serves_people": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
+        },
+        "minimum_servings": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
+        }
+      },
+      "title": "MenuItem",
+      "type": "object"
+    },
+    "Policy": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_servings": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
+        },
+        "one_item_per_person": {
+          "$ref": "#/$defs/Fact_bool_"
+        },
+        "solo_allowed": {
+          "$ref": "#/$defs/Fact_bool_"
+        },
+        "minimum_order_krw": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____"
+        },
+        "mandatory_extra_krw": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____"
+        }
+      },
+      "title": "Policy",
+      "type": "object"
+    },
+    "RestaurantEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "restaurant_id": {
+          "pattern": "^(kakao:[0-9]+|osm:(node|way|relation):[0-9]+)$",
+          "title": "Restaurant Id",
+          "type": "string"
+        },
+        "menu": {
+          "items": {
+            "$ref": "#/$defs/MenuItem"
+          },
+          "maxItems": 100,
+          "title": "Menu",
+          "type": "array"
+        },
+        "menu_images": {
+          "items": {
+            "$ref": "#/$defs/Fact_str_"
+          },
+          "maxItems": 20,
+          "title": "Menu Images",
+          "type": "array"
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        },
+        "opening_hours": {
+          "$ref": "#/$defs/Fact_str_"
+        },
+        "open_now": {
+          "$ref": "#/$defs/Fact_bool_"
+        },
+        "rating_out_of_five": {
+          "$ref": "#/$defs/Fact_Annotated_float__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0___Le_le_5_____"
+        },
+        "review_count": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____"
+        }
+      },
+      "required": [
+        "restaurant_id"
+      ],
+      "title": "RestaurantEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "restaurants": {
+      "items": {
+        "$ref": "#/$defs/RestaurantEvidence"
+      },
+      "maxItems": 2000,
+      "title": "Restaurants",
+      "type": "array"
+    }
+  },
+  "title": "Registry",
+  "type": "object"
+}
