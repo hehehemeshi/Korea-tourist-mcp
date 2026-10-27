@@ -1,0 +1,27 @@
+name: Verify keyless GBIS geometry
+on:
+  push:
+    branches: [research/gbis-public-access]
+permissions:
+  contents: read
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install httpx
+      - run: |
+          python - <<'PY'
+          import httpx,json
+          for path in ('routeStations','busRouteLine'):
+              try:
+                  response=httpx.get('https://m.gbis.go.kr/api/'+path,params={'routeId':'200000060'},timeout=35,follow_redirects=False)
+                  print('DIRECT_SHAPE',path,response.status_code,response.headers.get('content-type'))
+                  data=response.json()
+                  print('JSON_SAMPLE',path,json.dumps(data,ensure_ascii=False)[:2000])
+                  if isinstance(data,dict):print('TOP_KEYS',path,list(data))
+              except (httpx.HTTPError,ValueError) as exc:print('SOURCE_UNAVAILABLE',path,type(exc).__name__)
+          PY
