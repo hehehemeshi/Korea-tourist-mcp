@@ -73,6 +73,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -179,6 +181,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -285,6 +289,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -395,6 +401,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -500,6 +508,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -605,6 +615,8 @@
             "provider_response",
             "community",
             "translation",
+            "government_listing",
+            "search_index",
             "unknown"
           ],
           "title": "Method",
@@ -645,6 +657,9 @@
         "name_ko": {
           "$ref": "#/$defs/Fact_str_"
         },
+        "name_original": {
+          "$ref": "#/$defs/Fact_str_"
+        },
         "name_vi": {
           "$ref": "#/$defs/Fact_str_"
         },
@@ -658,6 +673,9 @@
           "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
         },
         "minimum_servings": {
+          "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
+        },
+        "minimum_diners": {
           "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1_____"
         }
       },
@@ -690,7 +708,7 @@
       "additionalProperties": false,
       "properties": {
         "restaurant_id": {
-          "pattern": "^(kakao:[0-9]+|osm:(node|way|relation):[0-9]+)$",
+          "pattern": "^(kakao:[0-9]+|osm:(node|way|relation):[0-9]+|source:[a-z0-9-]+)$",
           "title": "Restaurant Id",
           "type": "string"
         },
@@ -712,6 +730,14 @@
         },
         "policy": {
           "$ref": "#/$defs/Policy"
+        },
+        "ordering_notes": {
+          "items": {
+            "$ref": "#/$defs/Fact_str_"
+          },
+          "maxItems": 30,
+          "title": "Ordering Notes",
+          "type": "array"
         },
         "opening_hours": {
           "$ref": "#/$defs/Fact_str_"

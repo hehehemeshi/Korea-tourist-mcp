@@ -1,6 +1,7 @@
 const $=id=>document.getElementById(id);
 let mode='restaurants/rank';
 const forms={
+ 'restaurants/sources':['Tìm nguồn menu · Không cần key', [['query','Tên quán hoặc khu vực','Suwon','text']]],
  'restaurants/rank':['Tìm quán trong ngân sách · Bằng chứng rõ ràng', [['longitude','Kinh độ GPS','127.001','number'],['latitude','Vĩ độ GPS','37.267','number'],['radius','Bán kính chim bay (m)','500','number'],['budget_krw_per_person','Ngân sách KRW/người','10000','number'],['party_size','Số người ăn','1','number'],['query','Tên quán tiếng Hàn hoặc Anh (không bắt buộc)','','text']]],
  'restaurants/menu':['Menu và giá có nguồn', [['restaurant_id','Mã quán từ kết quả tìm kiếm','osm:node:123','text']]],
  'restaurants/policy':['Quy định gọi món có bằng chứng riêng', [['restaurant_id','Mã quán từ kết quả tìm kiếm','osm:node:123','text']]],
@@ -40,7 +41,7 @@ function paragraph(parent,value){const p=document.createElement('p');p.textConte
 function addLink(parent,label,url){
  try{const parsed=new URL(url);if(parsed.protocol!=='https:')return;const a=document.createElement('a');a.textContent=label;a.href=parsed.href;a.target='_blank';a.rel='noopener noreferrer';const p=document.createElement('p');p.append(a);parent.append(p);}catch{}
 }
-const fieldNames={name:'Tên quán',address:'Địa chỉ',longitude:'Kinh độ',latitude:'Vĩ độ',straight_line_distance_m:'Khoảng cách chim bay (m)',walking_distance_m:'Quãng đường đi bộ (m)',walking_duration_seconds:'Đi bộ dự kiến (giây)',name_ko:'Tên món tiếng Hàn',name_vi:'Tên món tiếng Việt',price_krw:'Giá KRW',minimum_servings:'Số suất tối thiểu',one_item_per_person:'Mỗi người một món',solo_allowed:'Cho phép khách đi một mình',minimum_order_krw:'Tiền món tối thiểu',mandatory_extra_krw:'Phụ phí bắt buộc/nhóm',open_now:'Đang mở cửa',opening_hours:'Giờ mở cửa',total_krw:'Tổng KRW tính theo điều kiện đã biết'};
+const fieldNames={name_original:'Tên món gốc',minimum_diners:'Số khách tối thiểu (riêng món)',published_on:'Ngày bài nguồn xuất bản',refresh_status:'Trạng thái tải lại nguồn',item_policies:'Quy định riêng từng món',ordering_notes:'Ghi chú gọi món từ nguồn',name:'Tên quán',address:'Địa chỉ',longitude:'Kinh độ',latitude:'Vĩ độ',straight_line_distance_m:'Khoảng cách chim bay (m)',walking_distance_m:'Quãng đường đi bộ (m)',walking_duration_seconds:'Đi bộ dự kiến (giây)',name_ko:'Tên món tiếng Hàn',name_vi:'Tên món tiếng Việt',price_krw:'Giá KRW',minimum_servings:'Số suất tối thiểu',one_item_per_person:'Mỗi người một món',solo_allowed:'Cho phép khách đi một mình',minimum_order_krw:'Tiền món tối thiểu',mandatory_extra_krw:'Phụ phí bắt buộc/nhóm',open_now:'Đang mở cửa',opening_hours:'Giờ mở cửa',total_krw:'Tổng KRW tính theo điều kiện đã biết'};
 function renderValue(parent,key,value){
  if(typeof value==='string'&&(key==='url'||key.endsWith('_url'))){addLink(parent,'Mở nguồn / chỉ đường',value);return;}
  if(value&&typeof value==='object'&&!Array.isArray(value)&&'value' in value&&'status' in value){
@@ -74,13 +75,14 @@ $('search').onsubmit=async event=>{
   for(const [key,label] of [['fetched_at','Truy vấn lúc'],['retrieved_at','Dữ liệu được tải lúc']])if(data[key])paragraph($('results'),label+': '+new Date(data[key]).toLocaleString('vi-VN',{timeZone:'Asia/Seoul'})+' (KST)');
   if(data.cached)paragraph($('results'),'Đang dùng bộ nhớ đệm (tối đa 1 giờ).');
   if(data.attribution)paragraph($('results'),data.attribution);
-  if(data.source)addLink($('results'),'Nguồn dữ liệu / tài liệu',data.source);
+  if(data.source){if(typeof data.source==='string')addLink($('results'),'Nguồn dữ liệu / tài liệu',data.source);else renderValue($('results'),'source',data.source);}
   for(const link of data.links||[])addLink($('results'),link.label,link.url);
+  for(const key of ['item_policies','ordering_notes','possible_sources','source_items'])if(data[key])renderValue($('results'),key,data[key]);
   if(data.coverage)paragraph($('results'),'Phạm vi: '+data.coverage);
   const rows=Array.isArray(data.data)?data.data:data.data?[data.data]:[];
   for(const row of rows){
    const card=document.createElement('article');
-   const labels={station:'Ga',line:'Tuyến',name:'Tên',name_ko:'Tên tiếng Hàn',address:'Địa chỉ',longitude:'Kinh độ',latitude:'Vĩ độ',direction:'Chiều',towards:'Hướng đi',destination:'Đến',message:'Thông báo gốc',generated_at:'Nguồn cập nhật',source_updated_at:'OSM chỉnh sửa',estimated_arrival:'Dự kiến đến',freshness:'Độ mới',platform:'Sân ga',platform_status:'Xác minh sân ga',scheduled_departure:'Khởi hành theo lịch',scheduled_arrival:'Đến theo lịch'};
+   const labels={station:'Ga',line:'Tuyến',name:'Tên',name_ko:'Tên tiếng Hàn',address:'Địa chỉ',longitude:'Kinh độ',latitude:'Vĩ độ',direction:'Chiều',towards:'Hướng đi',destination:'Đến',message:'Thông báo gốc',generated_at:'Nguồn cập nhật',source_updated_at:'Nguồn cập nhật',estimated_arrival:'Dự kiến đến',freshness:'Độ mới',platform:'Sân ga',platform_status:'Xác minh sân ga',scheduled_departure:'Khởi hành theo lịch',scheduled_arrival:'Đến theo lịch'};
    for(const [key,value] of Object.entries(row)){
     if(value&&typeof value==='object'){renderValue(card,key,value);continue;}
     if(key.endsWith('_url')&&value){addLink(card,key==='google_maps_url'?'Mở Google Maps':'Xem dữ liệu gốc',value);continue;}

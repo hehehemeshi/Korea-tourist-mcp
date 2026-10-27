@@ -10,8 +10,10 @@ Mặc định dùng nguồn mở + link Google. Không cần khóa API du lịch
 4. Bật app trong cuộc trò chuyện, thử: “Tìm ga Gangnam từ nguồn mở, ghi nguồn và tạo link Google Maps đi từ Seoul Station.”
 5. Khi thay đổi bộ công cụ, dùng Refresh/Scan Tools trong phần quản lý kết nối để ChatGPT nhận công cụ mới.
 
-Bản nhà hàng v2 có 18 công cụ. Nếu ChatGPT vẫn chỉ thấy công cụ cũ, mở cấu hình app → Refresh/Scan Tools. Thử: “Với tọa độ tôi cung cấp, tìm quán trong 500 m, ngân sách ₩10.000/người, 1 người ăn; chỉ xác nhận phù hợp khi có bằng chứng giá và số suất.” Xem [RESTAURANTS.md](RESTAURANTS.md). Dữ liệu OSM có thể thiếu hoặc khác dữ liệu cơ quan chính thức. Tên/địa chỉ dùng tiếng Anh hoặc Hàn; ChatGPT giải thích bằng tiếng Việt. Công cụ chỉ đường trả liên kết Google, không trả tuyến hay giờ tàu đã được đọc từ Google. Tàu trực tiếp, lịch TAGO và chi tiết KTO vẫn báo unavailable nếu chưa có khóa, không suy đoán số sân ga.
+Bản nhà hàng v2 có 19 công cụ. Nếu ChatGPT vẫn chỉ thấy công cụ cũ, mở cấu hình app → Refresh/Scan Tools. Thử: “Với tọa độ tôi cung cấp, tìm quán trong 500 m, ngân sách ₩10.000/người, 1 người ăn; chỉ xác nhận phù hợp khi có bằng chứng giá và số suất.” Xem [RESTAURANTS.md](RESTAURANTS.md). Dữ liệu OSM có thể thiếu hoặc khác dữ liệu cơ quan chính thức. Tên/địa chỉ dùng tiếng Anh hoặc Hàn; ChatGPT giải thích bằng tiếng Việt. Công cụ chỉ đường trả liên kết Google, không trả tuyến hay giờ tàu đã được đọc từ Google. Tàu trực tiếp, lịch TAGO và chi tiết KTO vẫn báo unavailable nếu chưa có khóa, không suy đoán số sân ga.
 
 Nếu gặp denied access/401, mở `/healthz`: `mcp_auth` phải là `none` để dùng No authentication. Nếu là `bearer`, đặt MCP_PUBLIC=true rồi lưu/redeploy. Nếu không có trường mcp_auth, dịch vụ vẫn chạy bản cũ: Manual Deploy → Deploy latest commit. Chọn OAuth chỉ khi đã triển khai OAuth gateway; dự án không có OAuth. Nếu request timeout, mở `/healthz` để đánh thức máy chủ Free rồi thử lại. Nếu app chưa có dữ liệu tìm kiếm, kiểm tra truy vấn tiếng Anh/Hàn và xem link Google dự phòng. Nếu không có mục thêm MCP, kiểm tra gói và quyền workspace.
 
 [Hướng dẫn OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server)
+
+Nguồn menu: thử “Tìm nguồn menu ở Suwon bằng get_restaurant_sources, rồi đọc giá và chính sách cho source:suwon-219569; ghi rõ giá niêm yết chưa được quán xác nhận hiện tại.” Xem MENU_SOURCES.md.

@@ -19,7 +19,7 @@ class Fact(BaseModel, Generic[T]):
     source_url: str | None = None
     checked_at: datetime | None = None
     source_updated_at: datetime | None = None
-    method: Literal['restaurant_official','direct_observation','provider_response','community','translation','unknown'] = 'unknown'
+    method: Literal['restaurant_official','direct_observation','provider_response','community','translation','government_listing','search_index','unknown'] = 'unknown'
     evidence_excerpt: str | None = Field(default=None, max_length=2000)
     attribution: str | None = None
 
@@ -40,11 +40,13 @@ class Fact(BaseModel, Generic[T]):
 class MenuItem(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     name_ko: Fact[str] = Field(default_factory=Fact[str])
+    name_original: Fact[str] = Field(default_factory=Fact[str])
     name_vi: Fact[str] = Field(default_factory=Fact[str])
     price_krw: Fact[Money] = Field(default_factory=Fact[Money])
     price_basis: Fact[Literal['per_serving','per_person','per_set']] = Field(default_factory=Fact)
     serves_people: Fact[PositiveInt] = Field(default_factory=Fact[PositiveInt])
     minimum_servings: Fact[PositiveInt] = Field(default_factory=Fact[PositiveInt])
+    minimum_diners: Fact[PositiveInt] = Field(default_factory=Fact[PositiveInt])
 
 class Policy(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
@@ -56,10 +58,11 @@ class Policy(BaseModel):
 
 class RestaurantEvidence(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
-    restaurant_id: str = Field(pattern=r'^(kakao:[0-9]+|osm:(node|way|relation):[0-9]+)$')
+    restaurant_id: str = Field(pattern=r'^(kakao:[0-9]+|osm:(node|way|relation):[0-9]+|source:[a-z0-9-]+)$')
     menu: list[MenuItem] = Field(default_factory=list, max_length=100)
     menu_images: list[Fact[str]] = Field(default_factory=list, max_length=20)
     policy: Policy = Field(default_factory=Policy)
+    ordering_notes: list[Fact[str]] = Field(default_factory=list, max_length=30)
     opening_hours: Fact[str] = Field(default_factory=Fact[str])
     open_now: Fact[bool] = Field(default_factory=Fact[bool])
     rating_out_of_five: Fact[Annotated[float, Field(ge=0, le=5)]] = Field(default_factory=Fact)
@@ -125,12 +128,17 @@ def load_record(restaurant_id):
 
 def record_payload(restaurant_id):
     record, warning = load_record(restaurant_id)
+    return normalise_record(record), warning
+
+
+def normalise_record(record):
     data = record.model_dump(mode='json')
     for key in ('opening_hours','rating_out_of_five','review_count'):
         data[key] = normalise(data[key])
     # A restaurant being open now changes quickly; static hours never prove it.
     data['open_now'] = normalise(data['open_now'], max_age_days=1/288)  # five minutes
     data['policy'] = {k: normalise(v) for k,v in data['policy'].items()}
+    data['ordering_notes'] = [normalise(v) for v in data['ordering_notes']]
     data['menu'] = [{k:normalise(v) for k,v in item.items()} for item in data['menu']]
     images=[]
     for image in data['menu_images']:
@@ -139,4 +147,4 @@ def record_payload(restaurant_id):
             image=fact(reason='Unsafe/invalid image URL omitted.')
         images.append(image)
     data['menu_images']=images
-    return data, warning
+    return data

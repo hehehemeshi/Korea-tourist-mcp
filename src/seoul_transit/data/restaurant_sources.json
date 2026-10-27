@@ -1,0 +1,1804 @@
+{
+  "restaurants": [
+    {
+      "restaurant_id": "source:suwon-219569",
+      "name": "옛날손칼국수",
+      "address": "수원시 팔달구 중부대로 36-1",
+      "aliases": [
+        "Suwon",
+        "수원",
+        "Yetnal Son Kalguksu"
+      ],
+      "kind": "suwon_table",
+      "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+      "published_on": null,
+      "discovery_method": "search_index_extract",
+      "snapshot": {
+        "restaurant_id": "source:suwon-219569",
+        "menu": [
+          {
+            "name_ko": {
+              "value": "칼국수",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "칼국수 5,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "칼국수",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "칼국수 5,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Mì cắt dao",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "칼국수 5,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 5000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "칼국수 5,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": "수제비",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "수제비 6,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "수제비",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "수제비 6,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Canh bột mì xé",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "수제비 6,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 6000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "수제비 6,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": "콩국수",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "콩국수 7,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "콩국수",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "콩국수 7,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Mì sữa đậu nành",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "콩국수 7,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 7000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=219569",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "콩국수 7,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          }
+        ],
+        "menu_images": [],
+        "policy": {
+          "minimum_servings": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "one_item_per_person": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "solo_allowed": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "minimum_order_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "mandatory_extra_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          }
+        },
+        "ordering_notes": [],
+        "opening_hours": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "open_now": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "rating_out_of_five": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "review_count": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        }
+      },
+      "bindings": []
+    },
+    {
+      "restaurant_id": "source:suwon-1168802",
+      "name": "찬솔김밥",
+      "address": null,
+      "aliases": [
+        "Suwon",
+        "수원",
+        "Chansol Gimbap"
+      ],
+      "kind": "suwon_table",
+      "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+      "published_on": null,
+      "discovery_method": "search_index_extract",
+      "snapshot": {
+        "restaurant_id": "source:suwon-1168802",
+        "menu": [
+          {
+            "name_ko": {
+              "value": "김밥",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "김밥",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Cơm cuộn",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 3000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": "떡볶이",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "떡볶이",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Bánh gạo sốt cay",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 3000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "김밥과 떡볶이를 각 3,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": "라면",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "라면은 4,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "라면",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "라면은 4,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Mì ramyeon",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "라면은 4,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 4000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "라면은 4,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": "냉면",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "계절메뉴인 냉면은 6,000원",
+              "attribution": "Suwon City"
+            },
+            "name_original": {
+              "value": "냉면",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "계절메뉴인 냉면은 6,000원",
+              "attribution": "Suwon City"
+            },
+            "name_vi": {
+              "value": "Mì lạnh (món theo mùa)",
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "계절메뉴인 냉면은 6,000원",
+              "attribution": "Suwon City"
+            },
+            "price_krw": {
+              "value": 6000,
+              "status": "unverified",
+              "source_url": "https://www.suwon.go.kr/web/tour/cultureTour/cultureTourView.do?categoryCd=145&mstSeqNo=1168802",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "search_index",
+              "evidence_excerpt": "계절메뉴인 냉면은 6,000원",
+              "attribution": "Suwon City"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          }
+        ],
+        "menu_images": [],
+        "policy": {
+          "minimum_servings": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "one_item_per_person": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "solo_allowed": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "minimum_order_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "mandatory_extra_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          }
+        },
+        "ordering_notes": [],
+        "opening_hours": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "open_now": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "rating_out_of_five": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "review_count": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        }
+      },
+      "bindings": []
+    },
+    {
+      "restaurant_id": "source:kto-ohyeon-dongmun",
+      "name": "Ohyeon Bulbaek Jeju Dongmun Market Main Branch",
+      "address": "1F, 58-2 Seongji-ro, Jeju-si, Jeju Island",
+      "aliases": [
+        "Jeju",
+        "제주",
+        "Ohyeon Bulbaek"
+      ],
+      "kind": "kto_article",
+      "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+      "published_on": "2024-02-13",
+      "discovery_method": "direct_page_review",
+      "snapshot": {
+        "restaurant_id": "source:kto-ohyeon-dongmun",
+        "menu": [
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Pork Bulgogi Set Menu",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Pork Bulgogi Set Menu (Minimum order for 2 servings or more) KRW 14,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Suất cơm thịt heo bulgogi",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Pork Bulgogi Set Menu (Minimum order for 2 servings or more) KRW 14,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 14000,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Pork Bulgogi Set Menu (Minimum order for 2 servings or more) KRW 14,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": 2,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Pork Bulgogi Set Menu (Minimum order for 2 servings or more) KRW 14,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Swordtip Squid and Pork Bulgogi Set Menu",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Swordtip Squid and Pork Bulgogi Set Menu (1 Serving) KRW 17,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Suất cơm mực và thịt heo bulgogi",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Swordtip Squid and Pork Bulgogi Set Menu (1 Serving) KRW 17,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 17000,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Swordtip Squid and Pork Bulgogi Set Menu (1 Serving) KRW 17,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Spicy Octopus and Pork Bulgogi Set Menu",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Spicy Octopus and Pork Bulgogi Set Menu (1 Serving) KRW 16,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Suất cơm bạch tuộc cay và thịt heo bulgogi",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Spicy Octopus and Pork Bulgogi Set Menu (1 Serving) KRW 16,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 16000,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=189672",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Spicy Octopus and Pork Bulgogi Set Menu (1 Serving) KRW 16,000",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          }
+        ],
+        "menu_images": [],
+        "policy": {
+          "minimum_servings": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "one_item_per_person": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "solo_allowed": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "minimum_order_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "mandatory_extra_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          }
+        },
+        "ordering_notes": [],
+        "opening_hours": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "open_now": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "rating_out_of_five": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "review_count": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        }
+      },
+      "bindings": []
+    },
+    {
+      "restaurant_id": "source:kto-hankookjib",
+      "name": "Han Kook Jib",
+      "address": "119 Eojin-gil, Wansan-gu, Jeonju-si, Jeonbuk-do",
+      "aliases": [
+        "Jeonju",
+        "전주",
+        "Han Kook Jib"
+      ],
+      "kind": "kto_article",
+      "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+      "published_on": "2025-02-20",
+      "discovery_method": "direct_page_review",
+      "snapshot": {
+        "restaurant_id": "source:kto-hankookjib",
+        "menu": [
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Jeonju Bibimbap",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Jeonju Bibimbap – 15,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Cơm trộn Jeonju",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Jeonju Bibimbap – 15,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 15000,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Jeonju Bibimbap – 15,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Han Kook Jib set menu",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Han Kook Jib set menu (minimum order of 2 people) – 35,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Thực đơn bộ Han Kook Jib",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Han Kook Jib set menu (minimum order of 2 people) – 35,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 35000,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Han Kook Jib set menu (minimum order of 2 people) – 35,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": 2,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221301",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Han Kook Jib set menu (minimum order of 2 people) – 35,000 KRW",
+              "attribution": "Korea Tourism Organization"
+            }
+          }
+        ],
+        "menu_images": [],
+        "policy": {
+          "minimum_servings": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "one_item_per_person": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "solo_allowed": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "minimum_order_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "mandatory_extra_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          }
+        },
+        "ordering_notes": [],
+        "opening_hours": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "open_now": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "rating_out_of_five": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "review_count": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        }
+      },
+      "bindings": []
+    },
+    {
+      "restaurant_id": "source:kto-apple-house",
+      "name": "Apple House",
+      "address": "2F, 29 Dongjak-daero 27da-gil, Dongjak-gu, Seoul",
+      "aliases": [
+        "Seoul",
+        "서울",
+        "Apple House"
+      ],
+      "kind": "kto_article",
+      "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+      "published_on": "2023-12-04",
+      "discovery_method": "direct_page_review",
+      "snapshot": {
+        "restaurant_id": "source:kto-apple-house",
+        "menu": [
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Normal Tteokbokki",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Normal Tteokbokki KRW 5,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Bánh gạo cay",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Normal Tteokbokki KRW 5,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 5500,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Normal Tteokbokki KRW 5,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Instant Tteokbokki (2 Servings)",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Instant Tteokbokki (2 Servings) KRW 14,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Tteokbokki nấu tại bàn (2 suất)",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Instant Tteokbokki (2 Servings) KRW 14,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 14500,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Instant Tteokbokki (2 Servings) KRW 14,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          },
+          {
+            "name_ko": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "name_original": {
+              "value": "Fried Dumplings Mixed in Sauce",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Fried Dumplings Mixed in Sauce KRW 4,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "name_vi": {
+              "value": "Mandu chiên trộn sốt",
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "translation",
+              "evidence_excerpt": "Fried Dumplings Mixed in Sauce KRW 4,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_krw": {
+              "value": 4500,
+              "status": "unverified",
+              "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=184669",
+              "checked_at": "2026-10-27T14:43:36.227758+09:00",
+              "source_updated_at": null,
+              "method": "government_listing",
+              "evidence_excerpt": "Fried Dumplings Mixed in Sauce KRW 4,500",
+              "attribution": "Korea Tourism Organization"
+            },
+            "price_basis": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "serves_people": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_servings": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            },
+            "minimum_diners": {
+              "value": null,
+              "status": "unknown",
+              "source_url": null,
+              "checked_at": null,
+              "source_updated_at": null,
+              "method": "unknown",
+              "evidence_excerpt": null,
+              "attribution": null
+            }
+          }
+        ],
+        "menu_images": [],
+        "policy": {
+          "minimum_servings": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "one_item_per_person": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "solo_allowed": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "minimum_order_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          },
+          "mandatory_extra_krw": {
+            "value": null,
+            "status": "unknown",
+            "source_url": null,
+            "checked_at": null,
+            "source_updated_at": null,
+            "method": "unknown",
+            "evidence_excerpt": null,
+            "attribution": null
+          }
+        },
+        "ordering_notes": [],
+        "opening_hours": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "open_now": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "rating_out_of_five": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        },
+        "review_count": {
+          "value": null,
+          "status": "unknown",
+          "source_url": null,
+          "checked_at": null,
+          "source_updated_at": null,
+          "method": "unknown",
+          "evidence_excerpt": null,
+          "attribution": null
+        }
+      },
+      "bindings": []
+    }
+  ]
+}

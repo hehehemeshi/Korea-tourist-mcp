@@ -45,8 +45,8 @@ def metres(lon, lat, x, y):
 
 
 def restaurant_id(value):
-    if not re.fullmatch(r'(kakao:[0-9]+|osm:(node|way|relation):[0-9]+)',value):
-        raise ValueError('Dùng restaurant_id từ kết quả tìm kiếm: kakao:123 hoặc osm:node:123.')
+    if not re.fullmatch(r'(kakao:[0-9]+|osm:(node|way|relation):[0-9]+|source:[a-z0-9-]+)',value):
+        raise ValueError('Dùng restaurant_id từ kết quả tìm kiếm: kakao:123, osm:node:123 hoặc source:...')
     return value
 
 
@@ -210,6 +210,7 @@ async def search_nearby(longitude,latitude,radius=500,budget_krw_per_person=1000
     selected=selected[:limit]
     for index,row in enumerate(selected):
         attach_evidence(row)
+        await enrich_sources(row)
         x,y=row['longitude']['value'],row['latitude']['value']
         row['links']=o.google_links(query=(row['name']['value'] or 'restaurant')+' South Korea',
             origin=f'{lat},{lon}',destination=f'{y},{x}',mode='walking')['links']
@@ -244,7 +245,13 @@ def assess(row,budget,party):
     for item in row['menu']:
         price,basis=item['price_krw'],item['price_basis']
         minimum=item['minimum_servings'] if item['minimum_servings']['value'] is not None else policy['minimum_servings']
-        needed=[item['name_ko'],price,basis,minimum,policy['one_item_per_person'],policy['minimum_order_krw'],policy['mandatory_extra_krw']]
+        dish_name=item['name_ko'] if item['name_ko']['value'] is not None else item.get('name_original',e.fact())
+        needed=[dish_name,price,basis,minimum,policy['one_item_per_person'],policy['minimum_order_krw'],policy['mandatory_extra_krw']]
+        diners=item.get('minimum_diners',e.fact())
+        if diners['value'] is not None:
+            needed.append(diners)
+            if is_verified(diners) and party<diners['value']:
+                continue
         if party==1:
             needed.append(policy['solo_allowed'])
         if basis['value']=='per_set':
@@ -262,7 +269,7 @@ def assess(row,budget,party):
         if price['value']>0:
             portions=max(portions,math.ceil(minimum_order/price['value']))
         total=portions*price['value']+policy['mandatory_extra_krw']['value']
-        option=dict(item_name_ko=item['name_ko'],quantity=portions,total_krw=total,per_person_krw=total/party)
+        option=dict(item_name_ko=item['name_ko'],item_name_original=dish_name,quantity=portions,total_krw=total,per_person_krw=total/party)
         (feasible if total<=budget*party else failures).append(option)
     if feasible:
         best=min(feasible,key=lambda r:r['total_krw'])
@@ -305,3 +312,50 @@ def details(rid,kind):
         status='ok' if all(is_verified(f) for f in data.values()) else 'partial' if any(is_verified(f) for f in data.values()) else 'unknown'
     return dict(status=status,restaurant_id=rid,data=data,fetched_at=s.now().isoformat(),
         evidence_warning=warning,note='Không suy quy định gọi món từ tên quán, loại món hoặc giá menu. Tên Việt chỉ có nếu đã có bản dịch ghi nguồn; link/ảnh không đồng nghĩa nội dung đã được đọc.')
+
+
+async def enrich_sources(row):
+    from . import menu_sources as ms
+    try:
+        profile=ms.profile_for(row['restaurant_id'])
+        if profile is not None:
+            record,meta=await ms.read_source(row['restaurant_id'])
+            # Reviewed local data wins; automatic published data never becomes verified.
+            if not row['menu']:row['menu']=record['menu']
+            if not row['menu_images']:row['menu_images']=record['menu_images']
+            for key,value in record['policy'].items():
+                if row['order_policy'][key]['value'] is None:row['order_policy'][key]=value
+            row['source_metadata']=meta
+            row['ordering_notes']=record['ordering_notes']
+        else:
+            name=row['name']['value']
+            if name:
+                row['possible_menu_sources']=ms.find(query=name)['data']
+                # These are suggestions, not identity matches; no facts are merged.
+    except s.Unavailable:
+        row['source_warning']='Menu source catalog unavailable; no additional claims.'
+    return row
+
+
+async def details_with_sources(rid,kind):
+    from . import menu_sources as ms
+    restaurant_id(rid)
+    local=details(rid,kind)
+    try:
+        profile=ms.profile_for(rid)
+        if profile is not None:
+            external=await ms.details(rid,kind)
+            if kind=='menu' and local['data']['items']:
+                local['source_items']=external['data']
+                local['source_metadata']=external['source']
+                return local
+            if kind=='policy':
+                for key,value in local['data'].items():
+                    if value['value'] is not None:external['data'][key]=value
+            return external
+        hit=_seen.get(rid)
+        if hit and time.monotonic()-hit[0]<3600 and hit[1]['name']['value']:
+            local['possible_sources']=ms.find(query=hit[1]['name']['value'])['data']
+    except s.Unavailable as exc:
+        local['source_warning']=str(exc)
+    return local
