@@ -67,7 +67,9 @@ def test_mcp_and_http():
 @pytest.mark.parametrize('public', ['true', ' TRUE ', '1', 'yes'])
 def test_public_mcp_initializes_without_bearer(monkeypatch, public):
     from fastapi.testclient import TestClient
-    from seoul_transit.app import app
+    # FastMCP HTTP session managers have a single-use lifespan; isolate each app.
+    import importlib
+    app = importlib.reload(importlib.import_module('seoul_transit.app')).app
     monkeypatch.setenv('ACCESS_TOKEN', 'test-secret')
     monkeypatch.setenv('MCP_PUBLIC', public)
     with TestClient(app) as client:
@@ -82,7 +84,9 @@ def test_public_mcp_initializes_without_bearer(monkeypatch, public):
 
 def test_private_mcp_requires_token(monkeypatch):
     from fastapi.testclient import TestClient
-    from seoul_transit.app import app
+    # FastMCP HTTP session managers have a single-use lifespan; isolate each app.
+    import importlib
+    app = importlib.reload(importlib.import_module('seoul_transit.app')).app
     monkeypatch.setenv('ACCESS_TOKEN', 'test-secret')
     monkeypatch.setenv('MCP_PUBLIC', 'false')
     with TestClient(app) as client:
