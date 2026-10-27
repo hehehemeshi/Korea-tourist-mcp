@@ -113,11 +113,17 @@ async def overpass(lon,lat,radius,query):
 async def photon(lon,lat,radius,query):
     dy=radius/111000
     dx=radius/(111000*math.cos(math.radians(lat)))
-    params={'q':query or '음식점','lon':lon,'lat':lat,'limit':30,'osm_tag':'amenity:restaurant',
-        'bbox':f'{lon-dx},{lat-dy},{lon+dx},{lat+dy}'}
+    params={'lon':lon,'lat':lat,'limit':30,'osm_tag':['amenity:restaurant','amenity:fast_food']}
+    endpoint='https://photon.komoot.io/reverse'
+    if query:
+        endpoint='https://photon.komoot.io/api/'
+        params.update(q=query,bbox=f'{lon-dx},{lat-dy},{lon+dx},{lat+dy}')
+    else:
+        # Reverse category lookup does not require a generic word in the restaurant name.
+        params['radius']=radius/1000
     # Do not force English output on Hangul names.
     async with asyncio.timeout(15):
-        payload,checked,cached=await o.public_request('https://photon.komoot.io/api/',params)
+        payload,checked,cached=await o.public_request(endpoint,params)
     if not isinstance(payload.get('features'),list):
         raise s.Unavailable('Photon trả định dạng không hợp lệ.')
     rows=[]

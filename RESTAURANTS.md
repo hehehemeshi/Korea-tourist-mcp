@@ -22,7 +22,7 @@ REST tương ứng: `/api/restaurants`, `/api/restaurants/menu?restaurant_id=`, 
 
 - [Kakao Local](https://developers.kakao.com/docs/en/local/dev-guide#search-by-category): `category_group_code=FD6`, x/y, radius mét, sort distance, truy vấn tên Hàn khi có. Cần `KAKAO_REST_API_KEY`. Khóa không xuất hiện trong kết quả/lỗi. Không cung cấp menu/giá/minimum portions/ratings đáng tin cậy qua adapter này.
 - [Overpass](https://dev.overpass-api.de/overpass-doc/en/): chỉ `amenity=restaurant|fast_food`, giữ giờ mở cửa và website:menu nếu có nhưng **unverified**. Timeout và kết quả partial cũng kích hoạt Photon.
-- [Photon](https://github.com/komoot/photon): bbox nhỏ quanh GPS, lọc quốc gia KR, loại đối tượng và khoảng cách Haversine sau khi nhận dữ liệu. Không phải danh sách đầy đủ. Không trộn ID Kakao và OSM hoặc tự kết luận hai tên giống nhau là cùng quán.
+- [Photon](https://github.com/komoot/photon): dùng reverse category khi không nhập tên quán (radius theo km); tìm tên dùng bbox nhỏ quanh GPS, lọc quốc gia KR, loại đối tượng và khoảng cách Haversine sau khi nhận dữ liệu. Không phải danh sách đầy đủ. Không trộn ID Kakao và OSM hoặc tự kết luận hai tên giống nhau là cùng quán.
 
 Mỗi lần tìm dừng ở nguồn đầu tiên có kết quả hợp lệ; **không tuyên bố đã đối chiếu nhiều nguồn cho cùng một quán**. `provider_attempts` ghi lỗi/rỗng/thành công, thời điểm tải nếu có và trạng thái bị cắt. `no_data` không có nghĩa không có quán; `unavailable` là nguồn đều lỗi/chưa cấu hình. Luôn có link Google dự phòng, không scrape kết quả Google. Các truy vấn nguồn mở dùng cache/giới hạn chung hiện có; chạy một replica/worker như README.
 

@@ -244,3 +244,15 @@ class AdditionalEvidenceTests(unittest.TestCase):
                 self.assertEqual(data['walking_duration_seconds']['value'],540)
                 self.assertEqual(request.call_args.kwargs['headers']['Authorization'],'secret')
         asyncio.run(check())
+
+class PhotonReverseTests(unittest.TestCase):
+    def test_no_name_query_uses_category_reverse_in_kilometres(self):
+        async def check():
+            with patch('seoul_transit.open_data.public_request',new_callable=AsyncMock,return_value=({'features':[]},s.now().isoformat(),False)) as fetch:
+                await r.photon(127.01,37.27,500,'')
+                endpoint,params=fetch.call_args.args
+                self.assertTrue(endpoint.endswith('/reverse'))
+                self.assertEqual(params['radius'],0.5)
+                self.assertNotIn('q',params)
+                self.assertIn('amenity:restaurant',params['osm_tag'])
+        asyncio.run(check())
