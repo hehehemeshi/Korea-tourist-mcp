@@ -1,0 +1,73 @@
+name: Check anonymous GBIS browser data
+on:
+  push:
+    branches: [research/gbis-public-access]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  anonymous-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright httpx
+      - run: playwright install chromium --with-deps
+      - name: Read a public test route without credentials
+        run: |
+          cat > /tmp/check.py <<'PY'
+          import re, json
+          from urllib.parse import urlparse,urljoin
+          import httpx
+          from playwright.sync_api import sync_playwright
+          base='https://m.gbis.go.kr'
+          # Public client bundles only; do not read or reuse keys/tokens.
+          with httpx.Client(timeout=25) as client:
+              html=client.get(base+'/search').text
+              for src in re.findall(r'<script[^>]+src=["\']([^"\']+)',html):
+                  url=urljoin(base,src)
+                  if urlparse(url).hostname!='m.gbis.go.kr':continue
+                  source=client.get(url).text
+                  tokens=set(re.findall(r'["\']([^"\'\n]{3,160})["\']',source))
+                  for token in sorted(tokens):
+                      low=token.lower()
+                      if any(w in low for w in ('route','station','bus','baseurl','serveraction')) and not any(w in low for w in ('key','secret','token','readonly','node_modules','webpack','license')):
+                          if re.fullmatch(r'[a-zA-Z0-9_./:?-]{3,120}',token):print('PUBLIC_LITERAL',token)
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              context=browser.new_context(locale='ko-KR')
+              page=context.new_page()
+              def response(r):
+                  if urlparse(r.url).hostname!='m.gbis.go.kr':return
+                  kind=r.headers.get('content-type','')
+                  if 'json' not in kind and 'x-component' not in kind:return
+                  try:
+                      body=r.text()
+                      fields={name:len(re.findall(re.escape('"'+name+'"'),body)) for name in ('routeId','routeName','stationId','stationName','vehId','plateNo','gpsX','gpsY','x','y','stationSeq')}
+                      print('PUBLIC_DATA_RESPONSE',r.request.method,urlparse(r.url).path,r.status,kind,json.dumps({k:v for k,v in fields.items() if v}))
+                  except Exception:print('BODY_UNAVAILABLE',urlparse(r.url).path)
+              page.on('response',response)
+              page.goto(base+'/search',wait_until='domcontentloaded',timeout=45000)
+              field=page.locator('input').filter(visible=True).first
+              field.fill('11')
+              field.press('Enter')
+              page.wait_for_timeout(5000)
+              route_tab=page.get_by_role('button',name='노선',exact=True)
+              if route_tab.count():route_tab.click();page.wait_for_timeout(3000)
+              print('SEARCH_VISIBLE_TEXT',page.locator('body').inner_text()[:1800].replace('\n',' | '))
+              candidates=page.get_by_text('11',exact=True)
+              if candidates.count():
+                  candidates.first.click();page.wait_for_timeout(5000)
+                  print('ROUTE_PAGE',urlparse(page.url).path)
+                  print('ROUTE_VISIBLE_TEXT',page.locator('body').inner_text()[:2000].replace('\n',' | '))
+                  buttons=page.get_by_text('실시간',exact=False)
+                  if buttons.count():
+                      buttons.first.click();page.wait_for_timeout(5000)
+                      print('LIVE_PAGE',urlparse(page.url).path)
+                      print('LIVE_VISIBLE_TEXT',page.locator('body').inner_text()[:1800].replace('\n',' | '))
+              else:print('NO_EXACT_TEST_ROUTE_FOUND')
+              browser.close()
+          PY
+          python /tmp/check.py
