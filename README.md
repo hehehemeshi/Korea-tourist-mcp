@@ -81,3 +81,5 @@ uvicorn seoul_transit.app:app --host 0.0.0.0 --port 8000 --no-access-log
 ```
 
 Có thể chạy các lệnh này trong GitHub Codespaces trên trình duyệt. `.env` không tự tải; dùng biến môi trường của hosting hoặc shell. GitHub Actions kiểm thử và build Docker mỗi lần push; không cần PAT trong mã. Tests giả lập feed để kiểm tra hợp đồng dữ liệu và tình huống lỗi, không phục vụ fixture như dữ liệu trực tiếp. Không đảm bảo uptime/độ đầy đủ của nguồn công cộng hoặc quyền truy cập các API có khóa. Không bật HTTP debug logs vì khóa nguồn chính thức nằm trong URL.
+
+Output quán ăn 0.5.0: [OUTPUT.md](OUTPUT.md). Tọa độ do ChatGPT truyền vào, tối đa 10 quán gần đến xa, menu Hàn–Việt/giá/review hiển thị trực tiếp, bản đồ chung; thiếu dữ liệu ghi “Chưa có thông tin”. Refresh/Scan Tools sau khi triển khai để nhận metadata bản đồ.

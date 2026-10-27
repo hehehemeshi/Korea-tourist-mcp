@@ -144,7 +144,7 @@ async def photon(lon,lat,radius,query):
 def attach_evidence(row):
     record, warning=e.record_payload(row['restaurant_id'])
     row.update(menu=record['menu'],menu_images=record['menu_images'],order_policy=record['policy'],
-        rating=record['rating_out_of_five'],review_count=record['review_count'])
+        rating=record['rating_out_of_five'],review_count=record['review_count'],review_highlights=record['review_highlights'])
     for key in ('opening_hours','open_now'):
         if record[key]['value'] is not None:
             row[key]=record[key]

@@ -17,3 +17,5 @@ Nếu gặp denied access/401, mở `/healthz`: `mcp_auth` phải là `none` đ�
 [Hướng dẫn OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server)
 
 Nguồn menu: thử “Tìm nguồn menu ở Suwon bằng get_restaurant_sources, rồi đọc giá và chính sách cho source:suwon-219569; ghi rõ giá niêm yết chưa được quán xác nhận hiện tại.” Xem MENU_SOURCES.md.
+
+Output quán ăn 0.5.0: [OUTPUT.md](OUTPUT.md). Tọa độ do ChatGPT truyền vào, tối đa 10 quán gần đến xa, menu Hàn–Việt/giá/review hiển thị trực tiếp, bản đồ chung; thiếu dữ liệu ghi “Chưa có thông tin”. Refresh/Scan Tools sau khi triển khai để nhận metadata bản đồ.
