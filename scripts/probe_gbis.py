@@ -16,7 +16,7 @@ with httpx.Client(timeout=25, follow_redirects=False) as client:
         if urlparse(url).hostname != 'm.gbis.go.kr':continue
         urls.append(url)
     texts=[]
-    for url in urls[:8]:
+    for url in urls[:20]:
         response=client.get(url)
         print('SCRIPT',urlparse(url).path,response.status_code,'bytes',len(response.content))
         if response.status_code==200 and len(response.content)<4000000:texts.append(response.text)
@@ -24,6 +24,6 @@ with httpx.Client(timeout=25, follow_redirects=False) as client:
     for source in texts:
         for token in re.findall(r'["\']([^"\'\n]{4,180})["\']',source):
             lower=token.lower()
-            if (token.startswith('/') or token.startswith('https://m.gbis.go.kr')) and any(word in lower for word in ('route','bus','station','api/','search')):
+            if any(word in lower for word in ('/route','/bus','/station','/api','/search','route/list','bus/list')):
                 if not any(word in lower for word in ('key','token','secret','authorization')):strings.add(token)
     for token in sorted(strings)[:100]:print('PUBLIC_ASSET_PATH',token)
