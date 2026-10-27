@@ -23,18 +23,6 @@ jobs:
           import httpx
           from playwright.sync_api import sync_playwright
           base='https://m.gbis.go.kr'
-          # Public client bundles only; do not read or reuse keys/tokens.
-          with httpx.Client(timeout=25) as client:
-              html=client.get(base+'/search').text
-              for src in re.findall(r'<script[^>]+src=["\']([^"\']+)',html):
-                  url=urljoin(base,src)
-                  if urlparse(url).hostname!='m.gbis.go.kr':continue
-                  source=client.get(url).text
-                  tokens=set(re.findall(r'["\']([^"\'\n]{3,160})["\']',source))
-                  for token in sorted(tokens):
-                      low=token.lower()
-                      if any(w in low for w in ('route','station','bus','baseurl','serveraction')) and not any(w in low for w in ('key','secret','token','readonly','node_modules','webpack','license')):
-                          if re.fullmatch(r'[a-zA-Z0-9_./:?-]{3,120}',token):print('PUBLIC_LITERAL',token)
           with sync_playwright() as p:
               browser=p.chromium.launch(headless=True)
               context=browser.new_context(locale='ko-KR')
@@ -52,7 +40,7 @@ jobs:
                       allowed=('/api/routeSearch','/api/routeDetail','/api/routeStations','/api/busLocationsOfRoute','/api/routeLine')
                       if path in allowed and path not in captured:
                           captured[path]=r.url
-                          print('PUBLIC_QUERY',path,json.dumps({k:v for k,v in parse_qs(urlparse(r.url).query).items() if k in ('keyword','routeId','routeName','busId','q','searchKeyword','searchText')}))
+                          print('PUBLIC_QUERY',path,json.dumps({k:v for k,v in parse_qs(urlparse(r.url).query).items() if k in ('keyword','routeId','routeName','busId','q','searchKeyword','searchText')}));print('QUERY_FIELDS',path,list(parse_qs(urlparse(r.url).query)))
                           if 'json' in kind:
                               sample=re.sub(r'("(?:plateNo|vehId|serviceKey|apiKey|token)"\\s*:\\s*)"[^"]*"',r'\\1"<redacted>"',body)
                               print('PUBLIC_JSON_SAMPLE',path,sample[:2400])
@@ -85,7 +73,7 @@ jobs:
               else:print('NO_EXACT_TEST_ROUTE_FOUND')
               for path,url in captured.items():
                   direct=httpx.get(url,timeout=25,follow_redirects=False)
-                  print('ANONYMOUS_DIRECT',path,direct.status_code,direct.headers.get('content-type',''))
+                  print('ANONYMOUS_DIRECT',path,direct.status_code,direct.headers.get('content-type',''));print('DIRECT_SAMPLE',path,direct.text[:500])
 
               browser.close()
           PY
