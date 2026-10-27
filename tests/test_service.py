@@ -52,7 +52,7 @@ def test_mcp_and_http():
     async def check():
         async with Client(mcp) as client:
             tools=await client.list_tools()
-            assert {'get_arrivals','plan_route','get_rail_schedule','search_nearby_restaurants','get_restaurant_menu','get_order_policy','rank_restaurants'} <= {t.name for t in tools}
+            assert {'get_arrivals','plan_route','get_rail_schedule','search_nearby_restaurants','get_restaurant_menu','get_order_policy','rank_restaurants','get_restaurant_sources'} <= {t.name for t in tools}
     asyncio.run(check())
     with TestClient(app) as client:
         assert client.get('/healthz').status_code==200

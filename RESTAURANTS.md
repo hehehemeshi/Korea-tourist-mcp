@@ -63,3 +63,7 @@ Rank dùng quãng đường đi bộ chỉ khi tất cả kết quả đều có
 ## Kiểm thử
 
 Tests giả lập gồm: Overpass timeout/rỗng/partial → Photon, Kakao FD6/GPS/bán kính, Unicode Hangul, lọc vòng tròn và quốc gia, thiếu key, giá/policy thiếu hoặc cũ, hai suất so với hai khách, phụ phí, minimum bill, sức chứa set, lịch mở cửa không phải open_now, ảnh URL không hợp lệ, ORS lỗi và xếp hạng quán chưa đủ bằng chứng. GitHub Actions chạy toàn bộ tests và Docker build; fixtures không được phục vụ như menu thật.
+
+## Nguồn công khai đã bổ sung
+
+Xem [MENU_SOURCES.md](MENU_SOURCES.md). Có 5 hồ sơ thật/15 mục menu ban đầu, công cụ `get_restaurant_sources`, làm mới từ Suwon/KTO và adapter JSON-LD cho website quán đã duyệt. Tập giá này chưa xác minh hiện tại tại quán và không tự tạo OSM/Kakao binding. Điều kiện tối thiểu theo người và theo suất được giữ riêng; không biến bài cũ thành quy định hiện tại.
