@@ -12,7 +12,7 @@ UI_META={
     'openai/widgetCSP':{'connect_domains':[],'resource_domains':['https://tile.openstreetmap.org']},
 }
 TOOL_META={'ui':{'resourceUri':UI_URI},'openai/outputTemplate':UI_URI}
-BUS_UI_META={**UI_META,'openai/widgetDescription':'Đường tuyến GBIS, các bến và xe theo bến; dữ liệu đọc tự động, vị trí xe không phải GPS.'}
+BUS_UI_META={**UI_META,'openai/widgetDescription':'Bản đồ bus chọn nguồn theo khu vực, đường tuyến, bến và vị trí xe có mức chính xác/thời điểm riêng.'}
 
 
 def html():

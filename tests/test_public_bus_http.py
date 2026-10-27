@@ -52,3 +52,16 @@ def test_private_mcp_keeps_bus_api_private(monkeypatch):
   with patch.object(module.buses,'search',AsyncMock(return_value={'status':'no_data','data':[]})):
    response=client.get('/api/bus/search?query=11',headers={'Authorization':'Bearer owner'})
   assert response.json()['data']==[]
+
+def test_region_required_and_unsupported_api_never_reuses_provider(monkeypatch):
+ from fastapi.testclient import TestClient
+ module=importlib.reload(importlib.import_module('seoul_transit.app'))
+ monkeypatch.setenv('MCP_PUBLIC','true')
+ with TestClient(module.app) as client:
+  assert client.get('/api/bus/search?query=11').json()['status']=='needs_region'
+  assert client.get('/api/bus/search?query=11&region=Busan').json()['status']=='unsupported_region'
+  assert client.get('/api/bus/coverage').json()['nationwide_coverage'] is False
+  page=client.get('/bus').text
+  assert '<select id="region">' not in page
+  assert 'id="region" placeholder="Thành phố / tỉnh"' in page
+  assert 'value="수원"' not in page
