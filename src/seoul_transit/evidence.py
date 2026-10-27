@@ -67,6 +67,7 @@ class RestaurantEvidence(BaseModel):
     open_now: Fact[bool] = Field(default_factory=Fact[bool])
     rating_out_of_five: Fact[Annotated[float, Field(ge=0, le=5)]] = Field(default_factory=Fact)
     review_count: Fact[Money] = Field(default_factory=Fact[Money])
+    review_highlights: list[Fact[str]] = Field(default_factory=list,max_length=10)
 
 class Registry(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
@@ -139,6 +140,7 @@ def normalise_record(record):
     data['open_now'] = normalise(data['open_now'], max_age_days=1/288)  # five minutes
     data['policy'] = {k: normalise(v) for k,v in data['policy'].items()}
     data['ordering_notes'] = [normalise(v) for v in data['ordering_notes']]
+    data['review_highlights'] = [normalise(v) for v in data['review_highlights']]
     data['menu'] = [{k:normalise(v) for k,v in item.items()} for item in data['menu']]
     images=[]
     for image in data['menu_images']:

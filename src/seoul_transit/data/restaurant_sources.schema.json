@@ -828,6 +828,14 @@
         },
         "review_count": {
           "$ref": "#/$defs/Fact_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_0_____"
+        },
+        "review_highlights": {
+          "items": {
+            "$ref": "#/$defs/Fact_str_"
+          },
+          "maxItems": 10,
+          "title": "Review Highlights",
+          "type": "array"
         }
       },
       "required": [

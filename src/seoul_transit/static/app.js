@@ -80,6 +80,7 @@ $('search').onsubmit=async event=>{
   for(const key of ['item_policies','ordering_notes','possible_sources','source_items'])if(data[key])renderValue($('results'),key,data[key]);
   if(data.coverage)paragraph($('results'),'Phạm vi: '+data.coverage);
   const rows=Array.isArray(data.data)?data.data:data.data?[data.data]:[];
+  if(data.presentation){renderRestaurantReport(data.presentation);return;}
   for(const row of rows){
    const card=document.createElement('article');
    const labels={station:'Ga',line:'Tuyến',name:'Tên',name_ko:'Tên tiếng Hàn',address:'Địa chỉ',longitude:'Kinh độ',latitude:'Vĩ độ',direction:'Chiều',towards:'Hướng đi',destination:'Đến',message:'Thông báo gốc',generated_at:'Nguồn cập nhật',source_updated_at:'Nguồn cập nhật',estimated_arrival:'Dự kiến đến',freshness:'Độ mới',platform:'Sân ga',platform_status:'Xác minh sân ga',scheduled_departure:'Khởi hành theo lịch',scheduled_arrival:'Đến theo lịch'};
@@ -92,4 +93,21 @@ $('search').onsubmit=async event=>{
   }
  }catch(error){$('results').replaceChildren();paragraph($('results'),error.message);}finally{submit.disabled=false;}
 };
+function renderRestaurantReport(report){
+ const frame=document.createElement('iframe');frame.title='Bản đồ chung các quán';frame.style.width='100%';frame.style.height='420px';frame.style.border='0';frame.sandbox='allow-scripts allow-popups allow-popups-to-escape-sandbox';
+ const hash=(report.map_url||'').split('#')[1]||'';frame.src='/restaurant-map#'+hash;$('results').append(frame);
+ for(const c of report.restaurants||[]){
+  const card=document.createElement('article');const title=document.createElement('h2');title.textContent=c.number+'. '+c.name;card.append(title);
+  paragraph(card,'Khoảng cách: '+c.distance_display+' (đường chim bay) · Đi bộ: '+c.walking_distance_display);
+  paragraph(card,'Địa chỉ: '+c.address);if(c.walking_directions_url)addLink(card,'Chỉ đường đi bộ',c.walking_directions_url);
+  const table=document.createElement('table');const head=document.createElement('tr');
+  for(const text of ['Món tiếng Hàn','Tiếng Việt','Giá KRW','Đơn vị']){const th=document.createElement('th');th.textContent=text;head.append(th);}table.append(head);
+  for(const item of c.menu.length?c.menu:[{}]){const row=document.createElement('tr');for(const text of [item.name_ko,item.name_vi,item.price_display,item.price_basis]){const td=document.createElement('td');td.textContent=text||'Chưa có thông tin';row.append(td);}table.append(row);}
+  card.append(table);paragraph(card,'Điểm đánh giá: '+c.reviews.rating_display);paragraph(card,'Số lượt đánh giá: '+c.reviews.review_count_display);paragraph(card,'Nhận xét nổi bật: '+c.reviews.summary);
+  if(c.menu.some(i=>i.price_krw!==null&&i.price_evidence.status!=='verified'))paragraph(card,'Giá niêm yết chưa xác minh hiện tại.');
+  const seen=new Set();for(const f of [c.name_evidence,c.address_evidence,c.reviews.rating_evidence,c.reviews.count_evidence,...c.menu.map(i=>i.price_evidence),...c.reviews.highlights.map(h=>h.evidence)]){if(!f?.source_url||seen.has(f.source_url))continue;seen.add(f.source_url);addLink(card,'Nguồn · '+(f.checked_at||'Chưa có thông tin'),f.source_url);}
+  $('results').append(card);
+ }
+ paragraph($('results'),report.notice);
+}
 configure();
