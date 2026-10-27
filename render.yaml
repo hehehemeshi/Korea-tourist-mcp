@@ -1,5 +1,5 @@
-# Provider keys are optional at deployment. Add them later in Render Environment.
-# Missing keys return "unavailable"; this does not enable keyless transit data.
+# Open-data discovery + Google Maps links work without provider API keys.
+# Optional official provider keys can be added later in Render Environment.
 services:
   - type: web
     name: seoul-transit-mcp
@@ -11,3 +11,5 @@ services:
         generateValue: true
       - key: MCP_PUBLIC
         value: "false"
+      - key: OPEN_DATA_FIRST
+        value: "true"

@@ -1,72 +1,75 @@
 # Du lịch Hàn Quốc — MCP cho ChatGPT
 
-**Đã có mã nguồn; cần triển khai để lấy URL MCP.**
-
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hehehemeshi/Korea-tourist-mcp)
 
-1. Bấm **Deploy to Render** trên điện thoại và đăng nhập Render.
-2. Cấu hình các khóa API (có thể thêm sau; chức năng thiếu khóa sẽ báo chưa khả dụng).
-3. Đọc [hướng dẫn ChatGPT](CHATGPT.md) để chọn xác thực và thêm URL `/mcp`.
+**Mặc định dùng nguồn mở, không cần API key nhà cung cấp.** Python 3.12, FastMCP Streamable HTTP tại `/mcp`, giao diện di động tiếng Việt tại `/`.
 
-Không gửi token GitHub hoặc khóa API trong chat. Gói Free có thể ngủ và khởi động chậm.
+## Chức năng hiện tại
 
-# Seoul Metro & KORAIL remote MCP · Tiếng Việt
+| Chức năng | Nguồn mặc định | Giới hạn |
+|---|---|---|
+| Tìm địa điểm, địa chỉ, ga | OpenStreetMap qua Photon | Dữ liệu cộng đồng, phạm vi Hàn Quốc; có thể thiếu địa điểm/ga, không có mã ga chính thức |
+| Tìm địa điểm gần tọa độ | OpenStreetMap qua Overpass | Bán kính tối đa 5 km; tối đa 30 kết quả, chưa xếp theo khoảng cách |
+| Chỉ đường metro / ô tô | Liên kết Google Maps | Mở Google để xem; MCP chưa đọc tuyến, thời gian đi, chuyển tuyến hay giá từ Google |
+| Tìm lễ hội / khách sạn | Liên kết tìm kiếm Google | Chưa phải kết quả lễ hội hay phòng trống đã xác minh |
+| Tàu sắp đến trực tiếp | Seoul, nếu đã thêm khóa | Thiếu khóa sẽ báo unavailable; không có dữ liệu trực tiếp giả |
+| Lịch tàu KORAIL | TAGO, nếu đã thêm khóa | Lịch dự kiến, không phải thời gian thực |
+| Tuyến và chuyển tuyến trong MCP | NETWORK_FILE đã xác minh, nếu cấu hình | Nếu chưa có đồ thị chỉ trả link Google Maps |
+| Số sân ga | Không có nguồn xác minh | Luôn để null; không suy đoán từ chiều tàu, cửa tàu hay tag cộng đồng |
 
-Python 3.12, FastMCP Streamable HTTP at `/mcp`, FastAPI mobile web UI at `/`.
-No scraping of ticketing apps, no fabricated arrivals, no platform guesses.
+14 công cụ MCP: `search_stations`, `get_arrivals`, `plan_route`, `search_rail_stations`, `get_rail_schedule`, `search_tourism`, `nearby_tourism`, `tourism_detail`, `search_festivals`, `search_stays`, `search_places`, `geocode_address`, `get_driving_route`, `get_google_maps_links`.
 
-## Status and coverage
+`tourism_detail` và mã ga TAGO vẫn cần khóa của nguồn tương ứng. OSM không cung cấp các mã KTO/TAGO thay thế. Không có công cụ đặt vé, đặt phòng hay gọi taxi.
 
-Implemented: Seoul station search (Korean/English), official real-time arrival adapter with original direction/destination, explicit timestamp freshness, TAGO railway station IDs and direct timetables, static shortest-time graph routing with explicit transfer edges, Vietnamese responsive UI, optional bearer authentication, Docker and Render deployment, CI tests.
+## Triển khai từ điện thoại, không cần máy tính
 
-**Route data is not bundled.** Configure an operator-reviewed `NETWORK_FILE` before route planning can return journeys. This is a deliberate limitation: station IDs, row order and station numbers are not a reliable topology. No invented network is supplied. KORAIL commuter arrivals are available only where the Seoul arrival feed actually provides them; national railway live arrivals and verified platform numbers are not available from the implemented feeds. TAGO results are schedules, not live predictions. No fares, reservations, delay guarantees or full-network coverage claims.
+1. Mã đã có trong repository này. Bấm **Deploy to Render** và đăng nhập Render qua GitHub.
+2. Blueprint dùng gói **Free** nếu tài khoản/khu vực hỗ trợ. Máy chủ có thể ngủ, gây khởi động chậm. Chỉ chọn gói trả phí nếu bạn chấp nhận giá hiện hành.
+3. Bấm **Deploy Blueprint**; không cần nhập các khóa Seoul/KTO/Kakao/Naver. ACCESS_TOKEN được Render tự tạo.
+4. Kiểm tra `https://TEN.onrender.com/healthz` trả `ok`. Đây chỉ là sức khỏe máy chủ, không đảm bảo nguồn công cộng đang hoạt động.
+5. Xem [CHATGPT.md](CHATGPT.md) để chọn cách xác thực rồi thêm URL `/mcp` vào ChatGPT.
+6. Trong giao diện web `/`, nhập ACCESS_TOKEN từ Render để tìm địa điểm hoặc ga. Không gửi token qua lời nhắn ChatGPT, commit hoặc query URL.
 
-## Official sources
+Các REST endpoint tương ứng: `/api/places?query=`, `/api/stations?query=`, `/api/geocode?address=`, `/api/nearby?longitude=&latitude=&radius=`, `/api/route?origin=&destination=`, `/api/google?query=`, `/api/arrivals?station=`, `/api/rail-stations?city_code=11`, `/api/rail?origin=NODEID&destination=NODEID&date=YYYYMMDD`. `/api/tourism`, `/api/festivals`, `/api/stays`, `/api/tourism-detail` tương ứng các công cụ cùng tên.
 
-- [Seoul Metro station names OA-15442](https://data.seoul.go.kr/dataList/OA-15442/A/1/datasetView.do): `SearchSTNBySubwayLineInfo`, limited operator coverage, not every KORAIL commuter station. KOGL Type 1 attribution.
-- [Seoul arrivals OA-12764](https://data.seoul.go.kr/dataList/OA-12764/A/1/datasetView.do): `realtimeStationArrival`; `recptnDt` is source generation time (KST), `barvlDt` seconds from that time. Records older than 120 seconds, >30 seconds in the future, missing timestamps, zero/invalid estimates or departed trains produce no ETA. Original Korean direction retained. Platform always null.
-- [MOLIT TAGO railway API](https://www.data.go.kr/data/15098552/openapi.do): `getCtyAcctoTrainSttnList`, `getStrtpntAlocFndTrainInfo`; KORAIL services through public railway timetables. Up to 100 records per request; no automatic pagination yet.
-- [Official shortest route catalog](https://www.data.go.kr/data/15143842/openapi.do). Seoul OA-22724 lists a service termination notice. An unverified replacement endpoint is not used. Static graph routing is provided instead.
+## Nguồn mở và Google
 
-API schemas verified from public documentation; live integration requires your approved keys and has not been verified with credentials. HTTPS defaults are used; if an upstream only supports HTTP, verify current provider guidance before changing transport (never disable TLS certificate verification).
+- [OpenStreetMap](https://www.openstreetmap.org/copyright): dữ liệu cộng đồng theo ODbL, luôn ghi công tác giả; không phải dữ liệu cơ quan giao thông chính thức.
+- [Photon](https://github.com/komoot/photon): demo API công cộng cho phép mức sử dụng hợp lý, không cam kết uptime. Tìm kiếm giới hạn bbox Hàn Quốc và lọc countrycode KR. Tên tiếng Anh và Hàn thường phù hợp hơn tiếng Việt.
+- [Overpass](https://dev.overpass-api.de/overpass-doc/en/preface/commons.html): truy vấn POI gần tọa độ, không lấy nền bản đồ hoặc đọc dữ liệu tàu trực tiếp.
+- [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started): không cần Google API key. Chỉ tạo link tìm kiếm/chỉ đường; không scrape, không trả dữ liệu Google giả. Google Maps Platform API vẫn cần khóa và có thể tính phí.
 
-## Deploy from GitHub using only a browser
+Các yêu cầu công cộng dùng User-Agent nhận diện dự án, bộ nhớ đệm tối đa 128 truy vấn / 1 giờ, khoảng cách ít nhất 2 giây và tối đa 300 yêu cầu/ngày trên mỗi tiến trình. Chạy **một worker, một replica** khi dùng máy chủ demo. Muốn mở rộng phải tự host hoặc chọn nhà cung cấp phù hợp; không nhân bản tiến trình để vượt hạn mức. Cache không có bản ghi ngoài bộ nhớ và mất khi restart. Kết quả hiển thị riêng thời điểm truy vấn (`fetched_at`) và lúc tải dữ liệu (`retrieved_at`), trạng thái cached; thời điểm tải không phải thời điểm địa điểm được chỉnh sửa. Overpass giữ `source_updated_at` nếu nguồn có cung cấp.
 
-1. Create a GitHub repository. Download/extract the supplied source archive on your phone or use GitHub Codespaces in your browser. Upload the project contents (the directory containing `pyproject.toml`, not its parent). Ensure `.github/workflows/test.yml` is included; hidden files may require Codespaces or GitHub's browser editor.
-2. Open GitHub Actions and check the test/build workflow. You can also create a Codespace and run `pip install '.[test]'` then `pytest -q` entirely in its browser terminal.
-3. Register for Seoul Open Data keys: general station API and the separate real-time subway API. Apply for MOLIT TAGO TrainInfoService on data.go.kr. Provider approval or identity verification may be required. Use the **decoded** data.go.kr key; HTTPX encodes it exactly once.
-4. On Render, choose **New → Blueprint**, connect the GitHub repository and select `render.yaml`. This defaults to a Free instance where available; cold starts may delay MCP requests. Choose a paid instance only if you want always-on hosting and accept its current price. Set `SEOUL_API_KEY`, `SEOUL_SUBWAY_API_KEY`, `DATA_GO_KR_KEY` in Render's environment settings. Never commit keys. `ACCESS_TOKEN` is generated by the blueprint.
-5. After deployment, `/healthz` should return `ok`. Open `/`, enter the Render `ACCESS_TOKEN`, and test a station, e.g. `강남`. A missing key yields an explicit unavailable message; health is process health, not feed health.
-6. Connect a remote MCP client to `https://YOUR-SERVICE.onrender.com/mcp` with `Authorization: Bearer YOUR_ACCESS_TOKEN`. Clients must support Streamable HTTP and custom headers. This is static bearer auth, not OAuth; clients requiring OAuth need a separate OAuth gateway. Never put tokens in URL query strings.
-7. To enable routing, add `network.json` in GitHub after validating against an official operator map/dataset, add `COPY network.json /app/network.json` to Dockerfile and set `NETWORK_FILE=/app/network.json` in Render. Commit updates and Render redeploys. See schema below.
+Nếu Photon/Overpass gặp lỗi, tìm kiếm trả link Google rõ ràng, không giả vờ đã tìm được địa điểm. Không dùng Nominatim public làm fallback. Chỉ truy vấn theo thao tác người dùng, không autocomplete hoặc tải hàng loạt.
 
-For Railway or other container hosting: connect the same repository, use Dockerfile, set the same variables, expose `$PORT`, health check `/healthz`, enable HTTPS at the platform ingress. One worker is recommended. Public deployments should keep ACCESS_TOKEN enabled and add ingress rate limiting to protect official quotas; no distributed quota limiter or caching is included. Every arrival lookup calls the provider. Keys remain server-side. The browser token stays in memory and is not stored.
+## Bổ sung nguồn chính thức sau này
 
-## Verified graph format
+Trong Render → Environment, thêm các biến cần dùng (xem `.env.example`).
 
-JSON object with `source` (official HTTPS URL), `verified_on` (YYYY-MM-DD, at most 90 days old), `edges` (directed list). Each edge needs `from`, `to`, `kind` (`ride` or `transfer`), `seconds` (positive measured/published value). Optional `line`, `towards`, `source` fields can carry operator labels. Use station-line specific node IDs. Add reverse edges only when verified; transfer edges only for real interchange links. Do not infer transfers from equal names. Never put unverified platforms in graph fields. Router minimizes supplied seconds; excludes waiting, first/last train, closures, accessibility and timetable constraints. A source URL is provenance, not automatic proof: the maintainer must verify every edge. Test fixtures use synthetic nodes only and are never served as transit data.
+| Biến | Dịch vụ |
+|---|---|
+| SEOUL_API_KEY | [Ga Seoul OA-15442](https://data.seoul.go.kr/dataList/OA-15442/A/1/datasetView.do) |
+| SEOUL_SUBWAY_API_KEY | [Tàu đến Seoul OA-12764](https://data.seoul.go.kr/dataList/OA-12764/A/1/datasetView.do) — khóa metro riêng |
+| DATA_GO_KR_KEY | [MOLIT TAGO](https://www.data.go.kr/data/15098552/openapi.do) — bản Decoding |
+| KTO_API_KEY | [KTO EngService2](https://www.data.go.kr/data/15101753/openapi.do) — bản Decoding |
+| KAKAO_REST_API_KEY | [Kakao Local](https://developers.kakao.com/docs/en/local/dev-guide) |
+| NAVER_CLIENT_ID, NAVER_CLIENT_SECRET | [Naver Maps](https://api.ncloud-docs.com/docs/en/application-maps-overview) |
 
-## Development
+`OPEN_DATA_FIRST=true` mặc định. Đặt `false` để chọn Seoul/KTO/Kakao/Naver cho chức năng đã có khóa; chức năng thiếu khóa vẫn dùng OSM hoặc link Google. Riêng tàu trực tiếp và TAGO luôn cần nguồn chính thức, không chuyển sang số liệu cộng đồng. Seoul tính ETA từ recptnDt + barvlDt; bản ghi quá 120 giây, tương lai hơn 30 giây, thiếu thời gian, ước tính không hợp lệ hoặc tàu đã rời ga không có ETA.
+
+## Đồ thị tuyến tùy chọn
+
+`NETWORK_FILE` trỏ JSON có `source` URL cơ quan chính thức, `verified_on` YYYY-MM-DD (không quá 90 ngày) và `edges`: mỗi cạnh có `from`, `to`, `kind` (`ride` hoặc `transfer`), `seconds` dương. Dùng mã nút riêng cho từng ga/tuyến. Chỉ thêm cạnh ngược và chuyển tuyến khi đã kiểm chứng; không suy từ thứ tự mã ga hoặc trùng tên. Không thêm trường sân ga chưa được xác minh. Người duy trì phải xác minh mỗi cạnh; URL nguồn không tự chứng minh nội dung. Đồ thị không gồm chờ tàu, lịch tàu cuối, gián đoạn hoặc hạn chế tiếp cận. Không có đồ thị mạng tự bịa được đóng gói.
+
+## Kiểm thử và phát triển
 
 ```
 python -m venv .venv
 . .venv/bin/activate
 pip install '.[test]'
-export SEOUL_API_KEY=...
-export SEOUL_SUBWAY_API_KEY=...
-export DATA_GO_KR_KEY=...
-uvicorn seoul_transit.app:app --host 0.0.0.0 --port 8000 --no-access-log
 pytest -q
+uvicorn seoul_transit.app:app --host 0.0.0.0 --port 8000 --no-access-log
 ```
 
-`.env.example` documents variables; `.env` is not automatically loaded. Use shell exports, Codespaces secrets or hosting environment settings. Avoid HTTP debug logs: upstream keys appear in paths/query strings. No personal travel history is persisted. API routes: `/api/stations?query=`, `/api/arrivals?station=`, `/api/route?origin=&destination=`, `/api/rail-stations?city_code=11`, `/api/rail?origin=NODEID&destination=NODEID&date=YYYYMMDD`.
-
-## Validation limitations
-
-The build environment could not install dependencies because its network proxy was unavailable. Syntax compilation is checked locally; runtime tests and Docker build are supplied in GitHub Actions but have not been executed successfully here. Do not treat deployment or live API integration as verified until those checks pass with your approved keys.
-
-## Bản tích hợp du lịch và ChatGPT
-
-Xem [CHATGPT.md](CHATGPT.md) để thêm vào ChatGPT. Đã bổ sung 8 công cụ KTO/Kakao/Naver trực tiếp trên API của nhà cung cấp, không chạy mã của các MCP cộng đồng. Các khóa mới được ghi trong `.env.example` và Render Blueprint. Giao diện web hiện phục vụ giao thông; toàn bộ công cụ du lịch có sẵn qua MCP và REST API.
-
-Nguồn mới: [KTO EngService2](https://www.data.go.kr/data/15101753/openapi.do), [Kakao Local](https://developers.kakao.com/docs/en/local/dev-guide), [Naver Maps](https://api.ncloud-docs.com/docs/en/application-maps-overview). KTO có giới hạn riêng cho ảnh; ứng dụng không tự tải hoặc sửa ảnh. Chưa thử live với các khóa API. Thời điểm truy vấn không đồng nghĩa thời điểm địa điểm cập nhật thông tin.
+Có thể chạy các lệnh này trong GitHub Codespaces trên trình duyệt. `.env` không tự tải; dùng biến môi trường của hosting hoặc shell. GitHub Actions kiểm thử và build Docker mỗi lần push; không cần PAT trong mã. Tests giả lập feed để kiểm tra hợp đồng dữ liệu và tình huống lỗi, không phục vụ fixture như dữ liệu trực tiếp. Không đảm bảo uptime/độ đầy đủ của nguồn công cộng hoặc quyền truy cập các API có khóa. Không bật HTTP debug logs vì khóa nguồn chính thức nằm trong URL.
