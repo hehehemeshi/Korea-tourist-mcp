@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: seoul-transit-mcp
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: SEOUL_API_KEY
+        sync: false
+      - key: SEOUL_SUBWAY_API_KEY
+        sync: false
+      - key: DATA_GO_KR_KEY
+        sync: false
+      - key: ACCESS_TOKEN
+        generateValue: true
+      - key: KTO_API_KEY
+        sync: false
+      - key: KAKAO_REST_API_KEY
+        sync: false
+      - key: NAVER_CLIENT_ID
+        sync: false
+      - key: NAVER_CLIENT_SECRET
+        sync: false
+      - key: MCP_PUBLIC
+        value: "false"
